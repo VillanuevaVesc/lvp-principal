@@ -6,14 +6,15 @@ import {
   ShieldAlert,
   LogOut,
   Fingerprint,
-  ArrowDownRight,
-  ArrowUpRight,
   Waypoints,
   Snowflake,
   Timer,
   Landmark,
   Handshake,
   Mail,
+  Repeat,
+  Percent,
+  Zap,
 } from 'lucide-react'
 import { isOmegaGranted, revokeOmegaAccess } from '@/lib/omega-session'
 
@@ -22,6 +23,7 @@ const OBSIDIAN = '#0A0A0B'
 const GOLD = '#c5a880'
 const EMERALD = '#00FF66'
 const RED = '#FF2E2E'
+const BLUE = '#00E5FF'
 const EMAIL = 'prive@velaluxeprive.com'
 
 const GRID_BACKGROUND: React.CSSProperties = {
@@ -31,31 +33,28 @@ const GRID_BACKGROUND: React.CSSProperties = {
   backgroundSize: '44px 44px',
 }
 
-/* ---------- DATOS REALES DEL EXPEDIENTE PRIMAFRIO SL ---------- */
-const SUMMARY = [
+/* ---------- DISTRIBUCIÓN PORCENTUAL DE SANGRÍA (DONUT) ---------- */
+const BLEED = [
   {
-    key: 'sangria',
-    label: 'SANGRÍA ESTRUCTURAL CONFIRMADA',
-    value: '−1.850.000,00 € / año',
-    sub: '−154.166,67 € / mes',
+    key: 'multimodal',
+    pct: 60.54,
+    label: 'Subcontratación Multimodal',
+    amount: '−1.120.000,00 € / año',
     tone: RED,
-    icon: ArrowDownRight,
   },
   {
-    key: 'rescate',
-    label: 'RESCATE POTENCIAL DE EBITDA',
-    value: '+1.850.000,00 € / año',
-    sub: '+2,4 % NETO EN PyG',
-    tone: EMERALD,
-    icon: ArrowUpRight,
+    key: 'frio',
+    pct: 26.22,
+    label: 'Cadena de Frío y Mermas',
+    amount: '−485.000,00 € / año',
+    tone: BLUE,
   },
   {
     key: 'float',
-    label: 'DESBLOQUEO DE FLOAT · LIQUIDEZ e-CMR',
-    value: '+245.000,00 €',
-    sub: 'EN CAJA RÁPIDA',
-    tone: GOLD,
-    icon: ArrowUpRight,
+    pct: 13.24,
+    label: 'Float Hijacking / Liquidez e-CMR',
+    amount: '+245.000,00 € en caja',
+    tone: EMERALD,
   },
 ] as const
 
@@ -73,7 +72,7 @@ const VECTORS = [
     icon: Snowflake,
     title: 'Cadena de Frío y Mermas',
     impact: '−485.000,00 € / año',
-    tone: RED,
+    tone: BLUE,
     body: 'Asimetría en la conciliación transaccional de micro-penalizaciones térmicas. Absorción pasiva del 7,79 % de la masa patrimonial base, compensable vía reconciliación técnica directa.',
   },
   {
@@ -91,6 +90,18 @@ const ROADMAP = [
   { phase: 'FASE II', days: 'Días 8-21', title: 'Arbitraje y Float' },
   { phase: 'FASE III', days: 'Días 22-35', title: 'Reconciliación de Mermas' },
   { phase: 'FASE IV', days: 'Días 36-45', title: 'Consignación EBITDA' },
+] as const
+
+const RETAINER = [
+  { band: 'Facturación < 5 M€', fee: '5.000 € / mes' },
+  { band: '5 M€ – 25 M€', fee: '10.000 € / mes' },
+  { band: 'Facturación > 25 M€', fee: '25.000 € / mes' },
+] as const
+
+const SUCCESS_SCALE = [
+  { tramo: 'Tramo I', rate: '10 %', note: 'Masa crítica inicial' },
+  { tramo: 'Tramo II', rate: '15 %', note: 'Masa crítica intermedia' },
+  { tramo: 'Tramo III', rate: '25 %', note: 'Masa crítica máxima' },
 ] as const
 
 /* ---------- GUARDA EFIMERA · ONE-TIME VIEW PROTOCOL ---------- */
@@ -208,31 +219,53 @@ export default function DashboardPage() {
           </div>
         </section>
 
-        {/* ================= BLOQUE 2 · CUADRO RESUMEN ================= */}
+        {/* ================= BLOQUE 2 · DASHBOARD DE IMPACTO + DONUT ================= */}
         <section className="animate-fadeIn">
-          <SectionTitle index="01" title="Cuadro Resumen de Márgenes y Rescate" />
-          <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
-            {SUMMARY.map((s) => {
-              const Icon = s.icon
-              return (
-                <div
-                  key={s.key}
-                  className="p-5 bg-black/40 border border-white/5"
-                  style={{ borderLeft: `2px solid ${s.tone}` }}
-                >
-                  <div className="flex items-center justify-between">
-                    <span className="font-mono text-[9px] uppercase tracking-[0.16em] text-gray-500 pr-2 leading-snug">
-                      {s.label}
-                    </span>
-                    <Icon className="h-4 w-4 shrink-0" style={{ color: s.tone }} aria-hidden="true" />
-                  </div>
-                  <p className="mt-4 text-xl font-light tracking-tight" style={{ color: s.tone }}>
-                    {s.value}
-                  </p>
-                  <p className="mt-1 font-mono text-[10px] uppercase tracking-wider text-gray-400">{s.sub}</p>
-                </div>
-              )
-            })}
+          <SectionTitle index="01" title="Dashboard de Impacto y Distribución de Sangría" caption="Cuadro Core · Anillo Porcentual" />
+
+          <div className="mt-6 grid grid-cols-1 lg:grid-cols-[1fr_1.2fr] gap-px border bg-white/[0.03]" style={{ borderColor: `${GOLD}22` }}>
+            {/* Cifra core */}
+            <div className="bg-[#0d0d0e] p-6 sm:p-8 flex flex-col justify-center gap-3">
+              <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-gray-500">
+                Rescate Neto Potencial
+              </span>
+              <p className="text-3xl sm:text-4xl font-light tracking-tight" style={{ color: EMERALD }}>
+                +1.850.000,00 €
+                <span className="text-base text-gray-500"> / año</span>
+              </p>
+              <div className="inline-flex items-center gap-2 self-start px-3 py-1.5 rounded-full" style={{ backgroundColor: 'rgba(0,255,102,0.08)', border: `1px solid ${EMERALD}44` }}>
+                <span className="h-1.5 w-1.5 rounded-full" style={{ backgroundColor: EMERALD }} />
+                <span className="font-mono text-[11px] font-bold tracking-wider" style={{ color: EMERALD }}>
+                  +2,4 % NETO EN EBITDA
+                </span>
+              </div>
+              <p className="mt-2 text-[12px] text-gray-400 font-light leading-relaxed">
+                Reversión íntegra de la sangría estructural confirmada de{' '}
+                <span style={{ color: RED }}>−1.850.000,00 € / año</span> sobre una masa patrimonial base de{' '}
+                <span style={{ color: GOLD }}>6.223.386,00 €</span>.
+              </p>
+            </div>
+
+            {/* Donut + leyenda */}
+            <div className="bg-[#0d0d0e] p-6 sm:p-8 flex flex-col sm:flex-row items-center gap-8">
+              <DonutChart data={BLEED} />
+              <ul className="flex-1 w-full space-y-4">
+                {BLEED.map((b) => (
+                  <li key={b.key} className="flex items-start gap-3">
+                    <span className="mt-1 h-2.5 w-2.5 shrink-0 rounded-sm" style={{ backgroundColor: b.tone }} aria-hidden="true" />
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-baseline justify-between gap-2">
+                        <span className="text-[13px] font-medium text-white leading-tight">{b.label}</span>
+                        <span className="font-mono text-[13px] font-bold shrink-0" style={{ color: b.tone }}>
+                          {b.pct.toLocaleString('es-ES', { minimumFractionDigits: 2 })} %
+                        </span>
+                      </div>
+                      <span className="font-mono text-[11px] text-gray-400">{b.amount}</span>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
         </section>
 
@@ -293,11 +326,11 @@ export default function DashboardPage() {
           >
             <p className="flex items-center gap-2 font-mono text-[11px] font-bold uppercase tracking-[0.16em]" style={{ color: RED }}>
               <ShieldAlert className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
-              Cláusula de Anulación por Incumplimiento Temporal
+              Cláusula de Anulación Total por Incumplimiento Temporal
             </p>
             <p className="text-[12px] text-gray-300 leading-relaxed font-light">
               La falta de ejecución de las directrices periciales en tiempo y forma por el cliente{' '}
-              <strong className="font-semibold" style={{ color: RED }}>ANULA TOTALMENTE</strong> el Informe Técnico
+              <strong className="font-semibold" style={{ color: RED }}>ANULA TOTALMENTE</strong> el Dictamen Técnico
               Pericial emitido y deja sin efecto la proyección de rescate{' '}
               <strong className="font-semibold" style={{ color: GOLD }}>(+2,4 % EBITDA)</strong>, exonerando al 100 % a{' '}
               <strong className="font-semibold text-white">Luxe Vela Privé Strategic Consulting SL</strong> de cualquier
@@ -307,35 +340,78 @@ export default function DashboardPage() {
           </div>
         </section>
 
-        {/* ================= BLOQUE 5 · MODELO DE ALIANZA ================= */}
+        {/* ================= BLOQUE 5 · MODELO DE ALIANZA · DOS VÍAS ================= */}
         <section className="animate-fadeIn">
-          <SectionTitle index="04" title="Modelo de Alianza y Contratación a Éxito" caption="Partner Agreement" />
-          <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="p-5 bg-black/40 border border-white/5" style={{ borderLeft: `2px solid ${EMERALD}` }}>
-              <p className="font-mono text-[10px] uppercase tracking-[0.18em] mb-2" style={{ color: EMERALD }}>
-                Invasión Cero
-              </p>
-              <p className="text-[13px] text-gray-300 font-light leading-relaxed">
-                Sin contraseñas, sin conexión a ERPs (SAP / Oracle), sin litigios.
+          <SectionTitle index="04" title="Modelo de Alianza y Dos Vías de Contratación" caption="Partner Agreement" />
+
+          <div className="mt-6 grid grid-cols-1 lg:grid-cols-2 gap-4">
+            {/* VÍA I · RETAINER */}
+            <div className="bg-[#0d0d0e] border border-white/5 p-6 flex flex-col gap-5" style={{ borderTop: `2px solid ${GOLD}` }}>
+              <div className="flex items-center gap-2.5">
+                <Repeat className="h-4 w-4 shrink-0" style={{ color: GOLD }} aria-hidden="true" />
+                <div>
+                  <span className="font-mono text-[10px] uppercase tracking-[0.2em] block" style={{ color: GOLD }}>
+                    Vía I · Suscripción Ejecutiva Permanente
+                  </span>
+                  <span className="font-mono text-[10px] text-gray-500">Retainer de Custodia</span>
+                </div>
+              </div>
+              <ul className="divide-y divide-white/5 border-y border-white/5">
+                {RETAINER.map((r) => (
+                  <li key={r.band} className="flex items-center justify-between gap-3 py-3">
+                    <span className="text-[12px] text-gray-300 font-light">{r.band}</span>
+                    <span className="font-mono text-[13px] font-bold" style={{ color: GOLD }}>
+                      {r.fee}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+              <p className="font-mono text-[11px] text-gray-400 leading-relaxed">
+                Permanencia indexada de <span style={{ color: GOLD }}>10 meses</span> mientras exista contingencia
+                pericial activa.
               </p>
             </div>
-            <div className="p-5 bg-black/40 border border-white/5" style={{ borderLeft: `2px solid ${GOLD}` }}>
-              <p className="font-mono text-[10px] uppercase tracking-[0.18em] mb-2" style={{ color: GOLD }}>
-                Fee a Éxito · Vía II
-              </p>
-              <p className="text-[13px] text-gray-300 font-light leading-relaxed">
-                15 % nominal sobre caja real recuperada{' '}
-                <span style={{ color: EMERALD }}>(10 % bajo Pronto Pago &lt; 72 h)</span>.
+
+            {/* VÍA II · A ÉXITO */}
+            <div className="bg-[#0d0d0e] border border-white/5 p-6 flex flex-col gap-5" style={{ borderTop: `2px solid ${EMERALD}` }}>
+              <div className="flex items-center gap-2.5">
+                <Percent className="h-4 w-4 shrink-0" style={{ color: EMERALD }} aria-hidden="true" />
+                <div>
+                  <span className="font-mono text-[10px] uppercase tracking-[0.2em] block" style={{ color: EMERALD }}>
+                    Vía II · Liquidación por Intercepción Puntual
+                  </span>
+                  <span className="font-mono text-[10px] text-gray-500">Honorarios a Éxito</span>
+                </div>
+              </div>
+              <ul className="divide-y divide-white/5 border-y border-white/5">
+                {SUCCESS_SCALE.map((s) => (
+                  <li key={s.tramo} className="flex items-center justify-between gap-3 py-3">
+                    <div className="flex flex-col">
+                      <span className="text-[12px] text-gray-300 font-light">{s.tramo}</span>
+                      <span className="font-mono text-[10px] text-gray-500">{s.note}</span>
+                    </div>
+                    <span className="font-mono text-[15px] font-bold" style={{ color: EMERALD }}>
+                      {s.rate}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+              <p className="flex items-start gap-2 font-mono text-[11px] leading-relaxed" style={{ color: BLUE }}>
+                <Zap className="h-3.5 w-3.5 mt-px shrink-0" aria-hidden="true" />
+                <span>
+                  Bonificación Pronto Pago <span className="font-bold">&lt; 72 h</span>: reducción de{' '}
+                  <span className="font-bold">5 puntos porcentuales absolutos</span> sobre la tasa nominal.
+                </span>
               </p>
             </div>
           </div>
 
           <a
             href={`mailto:${EMAIL}?subject=${encodeURIComponent('ACTIVACIÓN PROTOCOLO DE INTERVENCIÓN · PRIMAFRIO SL')}`}
-            className="mt-6 w-full flex items-center justify-center gap-3 px-6 py-4 font-sans font-bold text-[13px] uppercase tracking-[0.12em] rounded transition-opacity hover:opacity-90"
+            className="mt-6 w-full flex items-center justify-center gap-3 px-6 py-4 font-sans font-bold text-[13px] uppercase tracking-[0.12em] rounded transition-opacity hover:opacity-90 text-center"
             style={{ backgroundColor: GOLD, color: '#000' }}
           >
-            <Handshake className="h-4 w-4" aria-hidden="true" />
+            <Handshake className="h-4 w-4 shrink-0" aria-hidden="true" />
             Activar Protocolo de Intervención y Firmar Alianza de Rescate
           </a>
 
@@ -360,6 +436,55 @@ export default function DashboardPage() {
 }
 
 /* ---------- SUBCOMPONENTES ---------- */
+
+function DonutChart({ data }: { data: ReadonlyArray<{ key: string; pct: number; tone: string }> }) {
+  const size = 168
+  const stroke = 26
+  const radius = (size - stroke) / 2
+  const circumference = 2 * Math.PI * radius
+  let cumulative = 0
+
+  return (
+    <div className="relative shrink-0" style={{ width: size, height: size }}>
+      <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} role="img" aria-label="Distribución porcentual de la sangría estructural">
+        <circle
+          cx={size / 2}
+          cy={size / 2}
+          r={radius}
+          fill="none"
+          stroke="rgba(255,255,255,0.05)"
+          strokeWidth={stroke}
+        />
+        {data.map((d) => {
+          const seg = (d.pct / 100) * circumference
+          const dashArray = `${seg} ${circumference - seg}`
+          const dashOffset = -(cumulative / 100) * circumference
+          cumulative += d.pct
+          return (
+            <circle
+              key={d.key}
+              cx={size / 2}
+              cy={size / 2}
+              r={radius}
+              fill="none"
+              stroke={d.tone}
+              strokeWidth={stroke}
+              strokeDasharray={dashArray}
+              strokeDashoffset={dashOffset}
+              strokeLinecap="butt"
+              transform={`rotate(-90 ${size / 2} ${size / 2})`}
+            />
+          )
+        })}
+      </svg>
+      <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
+        <span className="font-mono text-[9px] uppercase tracking-[0.2em] text-gray-500">Masa</span>
+        <span className="text-[15px] font-light text-white leading-tight">100 %</span>
+        <span className="font-mono text-[9px] text-gray-500">sangría</span>
+      </div>
+    </div>
+  )
+}
 
 function HeaderCell({
   label,
