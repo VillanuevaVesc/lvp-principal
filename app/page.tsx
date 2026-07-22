@@ -6,12 +6,13 @@ import { ShieldAlert, AlertTriangle, Trash2 } from 'lucide-react'
 import { FlagIcon } from '@/components/flag-icons'
 import { ServiciosSection } from '@/components/servicios-section'
 import { MetodologiaSection } from '@/components/metodologia-section'
+import { FirmaContactoSection } from '@/components/firma-contacto-section'
 
 // Código de enlace maestro que otorga acceso directo al dashboard analítico de la firma.
 const DASHBOARD_ACCESS_CODE = 'LVP-OMEGA-1307-PRMF-926B'
 
 type Lang = 'es' | 'en' | 'fr' | 'de'
-type MenuKey = 'SERVICIOS' | 'METODOLOGIA' | 'CREDENCIALES' | 'CONTACTO' | 'EVALUACION'
+type MenuKey = 'SERVICIOS' | 'METODOLOGIA' | 'FIRMA_CONTACTO' | 'EVALUACION'
 
 const GOLD = '#c5a880'
 const MATTE = '#121212'
@@ -208,8 +209,7 @@ const translations: Record<Lang, Dict> = {
     menu: {
       SERVICIOS: 'SERVICIOS',
       METODOLOGIA: 'METODOLOGÍA',
-      CREDENCIALES: 'CREDENCIALES',
-      CONTACTO: 'CONTACTO',
+      FIRMA_CONTACTO: 'FIRMA & CONTACTO',
       EVALUACION: 'EVALUACIÓN ANUAL C-SUITE',
     },
     servicios: {
@@ -415,8 +415,7 @@ const translations: Record<Lang, Dict> = {
     menu: {
       SERVICIOS: 'SERVICES',
       METODOLOGIA: 'METHODOLOGY',
-      CREDENCIALES: 'CREDENTIALS',
-      CONTACTO: 'CONTACT',
+      FIRMA_CONTACTO: 'SIGNATURE & CONTACT',
       EVALUACION: 'C-SUITE ANNUAL EVALUATION',
     },
     servicios: {
@@ -622,8 +621,7 @@ const translations: Record<Lang, Dict> = {
     menu: {
       SERVICIOS: 'SERVICES',
       METODOLOGIA: 'MÉTHODOLOGIE',
-      CREDENCIALES: 'CRÉDENCIALS',
-      CONTACTO: 'CONTACT',
+      FIRMA_CONTACTO: 'SIGNATURE & CONTACT',
       EVALUACION: 'ÉVALUATION ANNUELLE C-SUITE',
     },
     servicios: {
@@ -829,8 +827,7 @@ const translations: Record<Lang, Dict> = {
     menu: {
       SERVICIOS: 'SERVICES',
       METODOLOGIA: 'METHODOLOGIE',
-      CREDENCIALES: 'REFERENZEN',
-      CONTACTO: 'KONTAKT',
+      FIRMA_CONTACTO: 'UNTERSCHRIFT & KONTAKT',
       EVALUACION: 'C-SUITE JAHRESBEWERTUNG',
     },
     servicios: {
@@ -1039,7 +1036,7 @@ const LANGS: { code: Lang; flag: string; label: string }[] = [
   { code: 'en', flag: '🇺🇸', label: 'EN' },
 ]
 
-const MENU_ORDER: MenuKey[] = ['SERVICIOS', 'METODOLOGIA', 'CREDENCIALES', 'CONTACTO', 'EVALUACION']
+  const MENU_ORDER: MenuKey[] = ['SERVICIOS', 'METODOLOGIA', 'FIRMA_CONTACTO', 'EVALUACION']
 
 export default function App() {
   const [lang, setLang] = useState<Lang>('es')
@@ -1148,13 +1145,6 @@ export default function App() {
     }, 2500)
   }
 
-  const currentSection: Record<Exclude<MenuKey, 'EVALUACION'>, Section> = {
-    SERVICIOS: t.servicios,
-    METODOLOGIA: t.metodologia,
-    CREDENCIALES: t.credenciales,
-    CONTACTO: t.contacto,
-  }
-
   return (
     <div
       className="w-screen h-screen flex flex-col overflow-hidden select-none font-sans text-white selection:bg-[#c5a880] selection:text-black"
@@ -1246,9 +1236,8 @@ export default function App() {
       {/* ÁREA CENTRAL — único scroll interno, blindado para iPad Safari */}
       <main className="w-full flex-1 overflow-y-auto overflow-x-hidden px-6 sm:px-10 lg:px-16 py-12 sm:py-20">
         {active === 'SERVICIOS' && <ServiciosSection lang={lang} />}
-            {active === 'METODOLOGIA' && <MetodologiaSection lang={lang} />}
-        {active === 'CREDENCIALES' && <ContentSection section={currentSection.CREDENCIALES} />}
-        {active === 'CONTACTO' && <ContentSection section={currentSection.CONTACTO} />}
+        {active === 'METODOLOGIA' && <MetodologiaSection lang={lang} />}
+        {active === 'FIRMA_CONTACTO' && <FirmaContactoSection lang={lang} />}
 
         {active === 'EVALUACION' && (
           <AsymmetryTerminal
