@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import { ShieldAlert, AlertTriangle, Trash2 } from 'lucide-react'
 import { FlagIcon } from '@/components/flag-icons'
 import { ServiciosSection } from '@/components/servicios-section'
+import { MetodologiaSection } from '@/components/metodologia-section'
 
 // Código de enlace maestro que otorga acceso directo al dashboard analítico de la firma.
 const DASHBOARD_ACCESS_CODE = 'LVP-OMEGA-1307-PRMF-926B'
@@ -1245,7 +1246,7 @@ export default function App() {
       {/* ÁREA CENTRAL — único scroll interno, blindado para iPad Safari */}
       <main className="w-full flex-1 overflow-y-auto overflow-x-hidden px-6 sm:px-10 lg:px-16 py-12 sm:py-20">
         {active === 'SERVICIOS' && <ServiciosSection lang={lang} />}
-        {active === 'METODOLOGIA' && <ContentSection section={currentSection.METODOLOGIA} />}
+            {active === 'METODOLOGIA' && <MetodologiaSection lang={lang} />}
         {active === 'CREDENCIALES' && <ContentSection section={currentSection.CREDENCIALES} />}
         {active === 'CONTACTO' && <ContentSection section={currentSection.CONTACTO} />}
 
