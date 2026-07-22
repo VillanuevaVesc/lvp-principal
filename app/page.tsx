@@ -7,6 +7,7 @@ import { FlagIcon } from '@/components/flag-icons'
 import { ServiciosSection } from '@/components/servicios-section'
 import { MetodologiaSection } from '@/components/metodologia-section'
 import { FirmaContactoSection } from '@/components/firma-contacto-section'
+import { grantOmegaAccess } from '@/lib/omega-session'
 
 // Código de enlace maestro que otorga acceso directo al dashboard analítico de la firma.
 const DASHBOARD_ACCESS_CODE = 'LVP-OMEGA-1307-PRMF-926B'
@@ -848,7 +849,7 @@ const translations: Record<Lang, Dict> = {
           p: 'Wir erkennen die transaktionale Entführung von Liquidität —Float Hijacking— innerhalb grenzüberschreitender Clearing-Zyklen und geben die Kontrolle über das Betriebskapital an die Geschäftsleitung zurück.',
         },
         {
-          h: 'Autoren-Sachverständigengutachten',
+          h: 'Autoren-Sachverst��ndigengutachten',
           p: 'Wir liefern ein exklusives monetarisiertes Dossier, geschützt durch das Geschäftsgeheimnis, das ein ökonometrisches Optimierungsmodell auf souveränem Niveau darstellt.',
         },
       ],
@@ -1075,9 +1076,10 @@ export default function App() {
 
   const handleVerifyOtp = (e: React.FormEvent) => {
     e.preventDefault()
-    // Enlace maestro: acceso inmediato al dashboard analítico de la firma.
+    // Enlace maestro: concede el acceso pericial efímero (un solo uso) y abre el expediente.
     if (otpInput.trim().toUpperCase() === DASHBOARD_ACCESS_CODE) {
       setErrorMessage('')
+      grantOmegaAccess()
       router.push('/dashboard')
       return
     }
