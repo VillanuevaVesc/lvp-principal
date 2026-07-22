@@ -1,313 +1,525 @@
 'use client'
 
-import React, { useMemo } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import {
-  Activity,
-  ArrowUpRight,
-  ArrowDownRight,
+  ShieldAlert,
   LogOut,
-  ShieldCheck,
-  Globe,
-  TrendingUp,
-  Wallet,
-  Layers,
+  Fingerprint,
+  Waypoints,
+  Snowflake,
+  Timer,
+  Landmark,
+  Handshake,
+  Mail,
+  Repeat,
+  Percent,
+  Zap,
 } from 'lucide-react'
-import {
-  AreaChart,
-  Area,
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
-  Cell,
-} from 'recharts'
+import { isOmegaGranted, revokeOmegaAccess } from '@/lib/omega-session'
 
+/* ---------- PALETA PERICIAL FORENSE C-SUITE ---------- */
+const OBSIDIAN = '#0A0A0B'
 const GOLD = '#c5a880'
-const MATTE = '#121212'
+const EMERALD = '#00FF66'
+const RED = '#FF2E2E'
+const BLUE = '#00E5FF'
+const EMAIL = 'prive@velaluxeprive.com'
 
 const GRID_BACKGROUND: React.CSSProperties = {
-  backgroundColor: MATTE,
+  backgroundColor: OBSIDIAN,
   backgroundImage:
-    'linear-gradient(#1c1c1c 1px, transparent 1px), linear-gradient(90deg, #1c1c1c 1px, transparent 1px)',
-  backgroundSize: '40px 40px',
+    'linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px)',
+  backgroundSize: '44px 44px',
 }
 
-// Formatea importes en euros (formato español) para la lectura ejecutiva.
-function formatEuro(value: number): string {
-  return new Intl.NumberFormat('es-ES', {
-    style: 'currency',
-    currency: 'EUR',
-    maximumFractionDigits: 0,
-  }).format(value)
-}
+/* ---------- DISTRIBUCIÓN PORCENTUAL DE SANGRÍA (DONUT) ---------- */
+const BLEED = [
+  {
+    key: 'multimodal',
+    pct: 60.54,
+    label: 'Subcontratación Multimodal',
+    amount: '−1.120.000,00 € / año',
+    tone: RED,
+  },
+  {
+    key: 'frio',
+    pct: 26.22,
+    label: 'Cadena de Frío y Mermas',
+    amount: '−485.000,00 € / año',
+    tone: BLUE,
+  },
+  {
+    key: 'float',
+    pct: 13.24,
+    label: 'Float Hijacking / Liquidez e-CMR',
+    amount: '+245.000,00 € en caja',
+    tone: EMERALD,
+  },
+] as const
 
-// Series analíticas de la firma (datos de demostración, deterministas).
-const AUM_SERIES = [
-  { m: 'ENE', v: 412 },
-  { m: 'FEB', v: 428 },
-  { m: 'MAR', v: 447 },
-  { m: 'ABR', v: 441 },
-  { m: 'MAY', v: 469 },
-  { m: 'JUN', v: 488 },
-  { m: 'JUL', v: 502 },
-  { m: 'AGO', v: 519 },
-  { m: 'SEP', v: 534 },
-  { m: 'OCT', v: 561 },
-  { m: 'NOV', v: 588 },
-  { m: 'DIC', v: 612 },
-]
+const VECTORS = [
+  {
+    code: 'VECTOR 01',
+    icon: Waypoints,
+    title: 'Subcontratación Multimodal',
+    impact: '−1.120.000,00 € / año',
+    tone: RED,
+    body: 'Divergencia estocástica no compensada en coeficientes de indexación de tracción intermedia frente a la curva de paridad de mercado. Descalce del 18,00 % sobre la masa patrimonial base.',
+  },
+  {
+    code: 'VECTOR 02',
+    icon: Snowflake,
+    title: 'Cadena de Frío y Mermas',
+    impact: '−485.000,00 € / año',
+    tone: BLUE,
+    body: 'Asimetría en la conciliación transaccional de micro-penalizaciones térmicas. Absorción pasiva del 7,79 % de la masa patrimonial base, compensable vía reconciliación técnica directa.',
+  },
+  {
+    code: 'VECTOR 03',
+    icon: Timer,
+    title: 'Float Hijacking y e-CMR',
+    impact: '+245.000,00 € liquidez',
+    tone: EMERALD,
+    body: 'Retención ineficiente de circulante por decalaje analógico en nodos de liquidación aduanera (14-22 días). Aceleración de clearing digital para liberar el 3,93 % de la masa patrimonial base.',
+  },
+] as const
 
-const ALLOCATION = [
-  { name: 'Renta Fija Soberana', v: 34 },
-  { name: 'Capital Privado', v: 27 },
-  { name: 'Inmobiliario Prime', v: 19 },
-  { name: 'Divisa y Cobertura', v: 12 },
-  { name: 'Liquidez Estratégica', v: 8 },
-]
+const ROADMAP = [
+  { phase: 'FASE I', days: 'Días 1-7', title: 'Invasión Cero' },
+  { phase: 'FASE II', days: 'Días 8-21', title: 'Arbitraje y Float' },
+  { phase: 'FASE III', days: 'Días 22-35', title: 'Reconciliación de Mermas' },
+  { phase: 'FASE IV', days: 'Días 36-45', title: 'Consignación EBITDA' },
+] as const
 
-const RISK_SERIES = [
-  { q: 'Q1', exp: 2.1, cob: 1.6 },
-  { q: 'Q2', exp: 2.4, cob: 2.0 },
-  { q: 'Q3', exp: 2.0, cob: 1.7 },
-  { q: 'Q4', exp: 2.6, cob: 2.3 },
-]
+const RETAINER = [
+  { band: 'Facturación < 5 M€', fee: '5.000 € / mes' },
+  { band: '5 M€ – 25 M€', fee: '10.000 € / mes' },
+  { band: 'Facturación > 25 M€', fee: '25.000 € / mes' },
+] as const
 
-const MANDATES = [
-  { ref: 'LVP-EQ-4471', region: 'Zúrich', clase: 'Capital Privado', estado: 'Activo', var: 4.2 },
-  { ref: 'LVP-RF-2210', region: 'Luxemburgo', clase: 'Renta Fija', estado: 'Activo', var: 1.1 },
-  { ref: 'LVP-RE-8830', region: 'Mónaco', clase: 'Inmobiliario', estado: 'Revisión', var: -0.8 },
-  { ref: 'LVP-FX-1097', region: 'Singapur', clase: 'Cobertura', estado: 'Activo', var: 2.7 },
-  { ref: 'LVP-EQ-5562', region: 'Londres', clase: 'Capital Privado', estado: 'Activo', var: -1.4 },
-]
+const SUCCESS_SCALE = [
+  { tramo: 'Tramo I', rate: '10 %', note: 'Masa crítica inicial' },
+  { tramo: 'Tramo II', rate: '15 %', note: 'Masa crítica intermedia' },
+  { tramo: 'Tramo III', rate: '25 %', note: 'Masa crítica máxima' },
+] as const
 
-function tooltipStyle() {
-  return {
-    backgroundColor: '#0c0c0c',
-    border: `1px solid ${GOLD}55`,
-    borderRadius: 4,
-    fontSize: 11,
-    fontFamily: 'monospace',
-    color: '#fff',
-  }
-}
-
+/* ---------- GUARDA EFIMERA · ONE-TIME VIEW PROTOCOL ---------- */
 export default function DashboardPage() {
   const router = useRouter()
+  const [authorized, setAuthorized] = useState(false)
 
-  const kpis = useMemo(
-    () => [
-      { label: 'Activos Bajo Gestión', value: formatEuro(612_400_000), delta: 8.4, icon: Wallet, up: true },
-      { label: 'Rendimiento YTD', value: '+14,7 %', delta: 2.1, icon: TrendingUp, up: true },
-      { label: 'Mandatos Activos', value: '47', delta: 3.0, icon: Layers, up: true },
-      { label: 'Exposición a Riesgo', value: '2,4 σ', delta: -0.6, icon: Activity, up: false },
-    ],
-    [],
-  )
+  useEffect(() => {
+    // El acceso solo es válido si la Solapa 4 concedió el permiso en esta sesión
+    // volátil. Una recarga reinicia la memoria del módulo → expediente bloqueado.
+    if (!isOmegaGranted()) {
+      router.replace('/')
+      return
+    }
+    setAuthorized(true)
+
+    // Auto-bloqueo al salir: recarga o cierre de pestaña revoca el token.
+    const revoke = () => revokeOmegaAccess()
+    window.addEventListener('beforeunload', revoke)
+    window.addEventListener('pagehide', revoke)
+    return () => {
+      window.removeEventListener('beforeunload', revoke)
+      window.removeEventListener('pagehide', revoke)
+    }
+  }, [router])
+
+  const handleClose = () => {
+    revokeOmegaAccess()
+    router.replace('/')
+  }
+
+  if (!authorized) {
+    return (
+      <div className="min-h-screen w-full flex items-center justify-center" style={GRID_BACKGROUND}>
+        <p className="font-mono text-[11px] uppercase tracking-[0.3em]" style={{ color: RED }}>
+          ▲ Expediente bloqueado · Redirigiendo…
+        </p>
+      </div>
+    )
+  }
 
   return (
     <div className="min-h-screen w-full text-white font-sans" style={GRID_BACKGROUND}>
-      {/* BARRA SUPERIOR */}
-      <header className="w-full px-6 py-4 flex items-center justify-between gap-4 border-b border-white/5">
+      {/* BANNER SUPERIOR · SESIÓN ÚNICA */}
+      <div
+        className="w-full flex items-center justify-center gap-3 px-4 py-2.5 text-center"
+        style={{
+          background: 'linear-gradient(90deg, rgba(255,46,46,0.14), rgba(197,168,128,0.14))',
+          borderBottom: `1px solid ${RED}55`,
+        }}
+      >
+        <ShieldAlert className="h-3.5 w-3.5 shrink-0 animate-pulse" style={{ color: RED }} aria-hidden="true" />
+        <p className="font-mono text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.18em]">
+          <span style={{ color: RED }}>SESIÓN PERICIAL ÚNICA Y CONFIDENCIAL</span>
+          <span className="text-gray-500"> // </span>
+          <span style={{ color: GOLD }}>ESTE EXPEDIENTE SE AUTO-BLOQUEARÁ AL SALIR</span>
+        </p>
+      </div>
+
+      {/* BARRA DE CONTROL */}
+      <header className="w-full px-5 sm:px-8 py-4 flex items-center justify-between gap-4 border-b border-white/5">
         <div className="flex items-center gap-3">
-          <svg aria-hidden="true" width="26" height="26" viewBox="0 0 100 100" className="shrink-0">
-            <path d="M20 20 L50 80 L80 20" fill="none" stroke={GOLD} strokeWidth="6" />
+          <svg aria-hidden="true" width="24" height="24" viewBox="0 0 100 100" className="shrink-0">
+            <path d="M20 22 L50 80 L80 22" fill="none" stroke={GOLD} strokeWidth="6" />
           </svg>
           <div>
-            <p className="text-sm font-light tracking-[0.2em] leading-none">LUXE&nbsp;VELA&nbsp;PRIVÉ</p>
-            <p className="text-[9px] font-mono uppercase tracking-[0.3em] text-gray-500 mt-1">
-              Dashboard Analítico · Enlace Seguro
+            <p className="text-[13px] font-light tracking-[0.2em] leading-none">LUXE&nbsp;VELA&nbsp;PRIVÉ</p>
+            <p className="text-[9px] font-mono uppercase tracking-[0.28em] text-gray-500 mt-1">
+              One-Time View Protocol · Enclave Cifrado
             </p>
           </div>
         </div>
-        <div className="flex items-center gap-4">
-          <span className="hidden sm:flex items-center gap-2 text-[10px] font-mono uppercase tracking-wider" style={{ color: '#34d399' }}>
-            <ShieldCheck className="h-3.5 w-3.5" aria-hidden="true" />
-            Sesión cifrada
-          </span>
-          <button
-            type="button"
-            onClick={() => router.push('/')}
-            className="flex items-center gap-2 text-[10px] font-mono uppercase tracking-wider px-3 py-2 rounded border border-white/10 hover:border-white/30 transition-colors text-gray-300"
-          >
-            <LogOut className="h-3.5 w-3.5" aria-hidden="true" />
-            Cerrar enlace
-          </button>
-        </div>
+        <button
+          type="button"
+          onClick={handleClose}
+          className="flex items-center gap-2 text-[10px] font-mono uppercase tracking-wider px-3 py-2 rounded border border-white/10 hover:border-white/30 transition-colors text-gray-300"
+        >
+          <LogOut className="h-3.5 w-3.5" aria-hidden="true" />
+          Cerrar y bloquear
+        </button>
       </header>
 
-      <main className="max-w-7xl mx-auto px-6 py-8 space-y-8">
-        {/* ENCABEZADO */}
-        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3">
-          <div>
-            <span className="text-[10px] font-mono uppercase tracking-[0.3em]" style={{ color: GOLD }}>
-              Panorama de la firma
-            </span>
-            <h1 className="text-2xl font-light tracking-tight mt-2 text-balance">
-              Consola de Inteligencia Patrimonial
-            </h1>
-          </div>
-          <p className="text-[11px] font-mono text-gray-500 flex items-center gap-2">
-            <Globe className="h-3.5 w-3.5" aria-hidden="true" />
-            Consolidado · {new Date().toLocaleDateString('es-ES', { day: '2-digit', month: 'long', year: 'numeric' })}
-          </p>
-        </div>
+      <main className="max-w-6xl mx-auto px-5 sm:px-8 py-10 space-y-14">
+        {/* ================= BLOQUE 1 · CABECERA PERICIAL ================= */}
+        <section className="animate-fadeIn">
+          <span className="font-mono text-[10px] uppercase tracking-[0.3em]" style={{ color: GOLD }}>
+            Dictamen Pericial · Alta Dirección
+          </span>
+          <h1 className="mt-4 text-2xl sm:text-4xl font-light tracking-tight leading-[1.15] text-balance">
+            LUXE VELA PRIVÉ <span style={{ color: GOLD }}>//</span> Dictamen Pericial y Marco de Rescate
+            <span className="text-gray-500 text-lg sm:text-2xl"> (v.3.2)</span>
+          </h1>
 
-        {/* KPIs */}
-        <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          {kpis.map((k) => {
-            const Icon = k.icon
-            return (
-              <div
-                key={k.label}
-                className="p-5 rounded-lg border border-white/5 bg-black/30"
-                style={{ borderLeft: `2px solid ${GOLD}` }}
-              >
-                <div className="flex items-center justify-between">
-                  <span className="text-[10px] font-mono uppercase tracking-wider text-gray-500">{k.label}</span>
-                  <Icon className="h-4 w-4" style={{ color: GOLD }} aria-hidden="true" />
-                </div>
-                <p className="mt-3 text-xl font-light tracking-tight">{k.value}</p>
-                <p
-                  className="mt-2 flex items-center gap-1 text-[11px] font-mono"
-                  style={{ color: k.up ? '#34d399' : '#f87171' }}
-                >
-                  {k.up ? <ArrowUpRight className="h-3 w-3" aria-hidden="true" /> : <ArrowDownRight className="h-3 w-3" aria-hidden="true" />}
-                  {Math.abs(k.delta)} % vs. trimestre previo
-                </p>
+          <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 gap-px border bg-white/[0.03]" style={{ borderColor: `${GOLD}22` }}>
+            <HeaderCell label="Partner Auditado" value="PRIMAFRIO SL" note="CIF: B73047599" />
+            <HeaderCell label="Masa Patrimonial Base" value="6.223.386,00 €" note="Base de cómputo pericial" valueTone={GOLD} />
+            <HeaderCell label="Filiales Consolidadas" value="Doctrans Lda. (100 %)" note="Lamision Lda. (1,3 %)" />
+            <HeaderCell label="Marco Legal" value="Ley 1/2019 de Secretos Empresariales" note="Invasión Cero en ERPs" />
+          </div>
+
+          <div className="mt-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between border-t pt-5" style={{ borderColor: `${GOLD}22` }}>
+            <div className="flex items-start gap-2.5">
+              <Fingerprint className="h-4 w-4 mt-0.5 shrink-0" style={{ color: EMERALD }} aria-hidden="true" />
+              <div className="font-mono text-[10px] leading-relaxed">
+                <span className="text-gray-500 uppercase tracking-[0.18em] block">Trazabilidad · Hash SHA-256</span>
+                <span style={{ color: EMERALD }}>8f9b…1307-LVP-OMEGA-VERIFIED</span>
               </div>
-            )
-          })}
+            </div>
+            <div className="font-mono text-[10px] leading-relaxed sm:text-right">
+              <span className="text-gray-500 uppercase tracking-[0.18em] block">Rúbricas Oficiales</span>
+              <span style={{ color: GOLD }}>CGVV · CEO — MD</span>
+              <span className="text-gray-600"> | </span>
+              <span style={{ color: GOLD }}>DSR · CAAO</span>
+            </div>
+          </div>
         </section>
 
-        {/* GRÁFICAS PRINCIPALES */}
-        <section className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-          {/* AUM */}
-          <div className="lg:col-span-2 p-5 rounded-lg border border-white/5 bg-black/30">
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="text-xs font-mono uppercase tracking-wider" style={{ color: GOLD }}>
-                Evolución de Activos Bajo Gestión (M€)
-              </h2>
-              <span className="text-[10px] font-mono text-gray-500">12 meses</span>
-            </div>
-            <ResponsiveContainer width="100%" height={260}>
-              <AreaChart data={AUM_SERIES} margin={{ top: 5, right: 8, left: -12, bottom: 0 }}>
-                <defs>
-                  <linearGradient id="aum" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor={GOLD} stopOpacity={0.35} />
-                    <stop offset="100%" stopColor={GOLD} stopOpacity={0} />
-                  </linearGradient>
-                </defs>
-                <CartesianGrid stroke="#ffffff10" vertical={false} />
-                <XAxis dataKey="m" tick={{ fill: '#888', fontSize: 10, fontFamily: 'monospace' }} axisLine={false} tickLine={false} />
-                <YAxis tick={{ fill: '#888', fontSize: 10, fontFamily: 'monospace' }} axisLine={false} tickLine={false} />
-                <Tooltip contentStyle={tooltipStyle()} cursor={{ stroke: GOLD, strokeOpacity: 0.3 }} />
-                <Area type="monotone" dataKey="v" stroke={GOLD} strokeWidth={2} fill="url(#aum)" />
-              </AreaChart>
-            </ResponsiveContainer>
-          </div>
+        {/* ================= BLOQUE 2 · DASHBOARD DE IMPACTO + DONUT ================= */}
+        <section className="animate-fadeIn">
+          <SectionTitle index="01" title="Dashboard de Impacto y Distribución de Sangría" caption="Cuadro Core · Anillo Porcentual" />
 
-          {/* ASIGNACIÓN */}
-          <div className="p-5 rounded-lg border border-white/5 bg-black/30">
-            <h2 className="text-xs font-mono uppercase tracking-wider mb-4" style={{ color: GOLD }}>
-              Asignación de Cartera
-            </h2>
-            <div className="space-y-4">
-              {ALLOCATION.map((a) => (
-                <div key={a.name}>
-                  <div className="flex justify-between text-[11px] font-mono mb-1">
-                    <span className="text-gray-400">{a.name}</span>
-                    <span style={{ color: GOLD }}>{a.v}%</span>
+          <div className="mt-6 grid grid-cols-1 lg:grid-cols-[1fr_1.2fr] gap-px border bg-white/[0.03]" style={{ borderColor: `${GOLD}22` }}>
+            {/* Cifra core */}
+            <div className="bg-[#0d0d0e] p-6 sm:p-8 flex flex-col justify-center gap-3">
+              <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-gray-500">
+                Rescate Neto Potencial
+              </span>
+              <p className="text-3xl sm:text-4xl font-light tracking-tight" style={{ color: EMERALD }}>
+                +1.850.000,00 €
+                <span className="text-base text-gray-500"> / año</span>
+              </p>
+              <div className="inline-flex items-center gap-2 self-start px-3 py-1.5 rounded-full" style={{ backgroundColor: 'rgba(0,255,102,0.08)', border: `1px solid ${EMERALD}44` }}>
+                <span className="h-1.5 w-1.5 rounded-full" style={{ backgroundColor: EMERALD }} />
+                <span className="font-mono text-[11px] font-bold tracking-wider" style={{ color: EMERALD }}>
+                  +2,4 % NETO EN EBITDA
+                </span>
+              </div>
+              <p className="mt-2 text-[12px] text-gray-400 font-light leading-relaxed">
+                Reversión íntegra de la sangría estructural confirmada de{' '}
+                <span style={{ color: RED }}>−1.850.000,00 € / año</span> sobre una masa patrimonial base de{' '}
+                <span style={{ color: GOLD }}>6.223.386,00 €</span>.
+              </p>
+            </div>
+
+            {/* Donut + leyenda */}
+            <div className="bg-[#0d0d0e] p-6 sm:p-8 flex flex-col sm:flex-row items-center gap-8">
+              <DonutChart data={BLEED} />
+              <ul className="flex-1 w-full space-y-4">
+                {BLEED.map((b) => (
+                  <li key={b.key} className="flex items-start gap-3">
+                    <span className="mt-1 h-2.5 w-2.5 shrink-0 rounded-sm" style={{ backgroundColor: b.tone }} aria-hidden="true" />
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-baseline justify-between gap-2">
+                        <span className="text-[13px] font-medium text-white leading-tight">{b.label}</span>
+                        <span className="font-mono text-[13px] font-bold shrink-0" style={{ color: b.tone }}>
+                          {b.pct.toLocaleString('es-ES', { minimumFractionDigits: 2 })} %
+                        </span>
+                      </div>
+                      <span className="font-mono text-[11px] text-gray-400">{b.amount}</span>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        {/* ================= BLOQUE 3 · VECTORES DE IMPACTO ================= */}
+        <section className="animate-fadeIn">
+          <SectionTitle index="02" title="Análisis Forense de Vectores de Impacto" caption="Técnico · Opacidad Pericial" />
+          <div className="mt-6 grid grid-cols-1 lg:grid-cols-3 gap-px border bg-white/[0.03]" style={{ borderColor: `${GOLD}22` }}>
+            {VECTORS.map((v) => {
+              const Icon = v.icon
+              return (
+                <div key={v.code} className="bg-[#0d0d0e] p-6 flex flex-col gap-3">
+                  <div className="flex items-center justify-between">
+                    <span className="font-mono text-[10px] tracking-[0.22em]" style={{ color: GOLD }}>
+                      {v.code}
+                    </span>
+                    <Icon className="h-4 w-4" style={{ color: v.tone }} aria-hidden="true" />
                   </div>
-                  <div className="h-1.5 w-full rounded-full bg-white/5 overflow-hidden">
-                    <div className="h-full rounded-full" style={{ width: `${a.v}%`, backgroundColor: GOLD }} />
-                  </div>
+                  <h3 className="text-[15px] font-medium text-white leading-tight">{v.title}</h3>
+                  <span className="font-mono text-[13px] font-bold" style={{ color: v.tone }}>
+                    {v.impact}
+                  </span>
+                  <p className="text-[12px] text-gray-400 leading-relaxed font-light">{v.body}</p>
+                </div>
+              )
+            })}
+          </div>
+        </section>
+
+        {/* ================= BLOQUE 4 · RUTA + CLÁUSULA DE ANULACIÓN ================= */}
+        <section className="animate-fadeIn">
+          <SectionTitle index="03" title="Matriz de Ruta Extrajudicial y Cláusula de Caducidad" />
+
+          {/* Hoja de ruta 45 días */}
+          <div className="mt-6">
+            <div className="flex items-center gap-2 mb-4">
+              <Landmark className="h-3.5 w-3.5" style={{ color: GOLD }} aria-hidden="true" />
+              <span className="font-mono text-[11px] uppercase tracking-[0.2em]" style={{ color: GOLD }}>
+                Hoja de Ruta Extrajudicial · 45 Días
+              </span>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-px border bg-white/[0.03]" style={{ borderColor: `${GOLD}22` }}>
+              {ROADMAP.map((r) => (
+                <div key={r.phase} className="bg-[#0d0d0e] p-5 flex flex-col gap-1.5">
+                  <span className="font-mono text-[10px] tracking-[0.22em]" style={{ color: EMERALD }}>
+                    {r.phase}
+                  </span>
+                  <span className="font-mono text-[10px] text-gray-500">{r.days}</span>
+                  <span className="text-[13px] font-light text-white mt-1">{r.title}</span>
                 </div>
               ))}
             </div>
           </div>
-        </section>
 
-        {/* RIESGO + TABLA */}
-        <section className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-          <div className="p-5 rounded-lg border border-white/5 bg-black/30">
-            <h2 className="text-xs font-mono uppercase tracking-wider mb-4" style={{ color: GOLD }}>
-              Exposición vs. Cobertura (σ)
-            </h2>
-            <ResponsiveContainer width="100%" height={220}>
-              <BarChart data={RISK_SERIES} margin={{ top: 5, right: 8, left: -12, bottom: 0 }}>
-                <CartesianGrid stroke="#ffffff10" vertical={false} />
-                <XAxis dataKey="q" tick={{ fill: '#888', fontSize: 10, fontFamily: 'monospace' }} axisLine={false} tickLine={false} />
-                <YAxis tick={{ fill: '#888', fontSize: 10, fontFamily: 'monospace' }} axisLine={false} tickLine={false} />
-                <Tooltip contentStyle={tooltipStyle()} cursor={{ fill: '#ffffff08' }} />
-                <Bar dataKey="exp" fill={GOLD} radius={[2, 2, 0, 0]} />
-                <Bar dataKey="cob" radius={[2, 2, 0, 0]}>
-                  {RISK_SERIES.map((_, i) => (
-                    <Cell key={i} fill="#3a3a3a" />
-                  ))}
-                </Bar>
-              </BarChart>
-            </ResponsiveContainer>
-          </div>
-
-          <div className="lg:col-span-2 p-5 rounded-lg border border-white/5 bg-black/30">
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="text-xs font-mono uppercase tracking-wider" style={{ color: GOLD }}>
-                Mandatos Activos
-              </h2>
-              <span className="text-[10px] font-mono text-gray-500">{MANDATES.length} referencias</span>
-            </div>
-            <div className="overflow-x-auto">
-              <table className="w-full text-left text-[11px] font-mono">
-                <thead>
-                  <tr className="text-gray-500 uppercase tracking-wider border-b border-white/10">
-                    <th className="py-2 pr-4 font-normal">Referencia</th>
-                    <th className="py-2 pr-4 font-normal">Jurisdicción</th>
-                    <th className="py-2 pr-4 font-normal">Clase</th>
-                    <th className="py-2 pr-4 font-normal">Estado</th>
-                    <th className="py-2 pr-4 font-normal text-right">Var. 30d</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {MANDATES.map((m) => (
-                    <tr key={m.ref} className="border-b border-white/5">
-                      <td className="py-2.5 pr-4" style={{ color: GOLD }}>{m.ref}</td>
-                      <td className="py-2.5 pr-4 text-gray-300">{m.region}</td>
-                      <td className="py-2.5 pr-4 text-gray-400">{m.clase}</td>
-                      <td className="py-2.5 pr-4">
-                        <span
-                          className="px-2 py-0.5 rounded-full text-[10px]"
-                          style={
-                            m.estado === 'Activo'
-                              ? { backgroundColor: 'rgba(52,211,153,0.12)', color: '#34d399' }
-                              : { backgroundColor: 'rgba(197,168,128,0.12)', color: GOLD }
-                          }
-                        >
-                          {m.estado}
-                        </span>
-                      </td>
-                      <td
-                        className="py-2.5 pr-4 text-right"
-                        style={{ color: m.var >= 0 ? '#34d399' : '#f87171' }}
-                      >
-                        {m.var >= 0 ? '+' : ''}
-                        {m.var.toFixed(1)} %
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+          {/* Cláusula de anulación total */}
+          <div
+            className="mt-6 p-5 space-y-2"
+            style={{ borderLeft: `2px solid ${RED}`, backgroundColor: 'rgba(255,46,46,0.05)' }}
+          >
+            <p className="flex items-center gap-2 font-mono text-[11px] font-bold uppercase tracking-[0.16em]" style={{ color: RED }}>
+              <ShieldAlert className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
+              Cláusula de Anulación Total por Incumplimiento Temporal
+            </p>
+            <p className="text-[12px] text-gray-300 leading-relaxed font-light">
+              La falta de ejecución de las directrices periciales en tiempo y forma por el cliente{' '}
+              <strong className="font-semibold" style={{ color: RED }}>ANULA TOTALMENTE</strong> el Dictamen Técnico
+              Pericial emitido y deja sin efecto la proyección de rescate{' '}
+              <strong className="font-semibold" style={{ color: GOLD }}>(+2,4 % EBITDA)</strong>, exonerando al 100 % a{' '}
+              <strong className="font-semibold text-white">Luxe Vela Privé Strategic Consulting SL</strong> de cualquier
+              penalidad, responsabilidad o garantía. Enfoque estricto de arbitraje técnico exógeno y conciliación
+              extrajudicial: <span style={{ color: EMERALD }}>cero vía judicial</span>.
+            </p>
           </div>
         </section>
 
-        <footer className="pt-4 text-[10px] font-mono text-gray-600 border-t border-white/5">
-          Luxe Vela Privé Strategic Consulting · Datos consolidados de demostración · Uso confidencial
+        {/* ================= BLOQUE 5 · MODELO DE ALIANZA · DOS VÍAS ================= */}
+        <section className="animate-fadeIn">
+          <SectionTitle index="04" title="Modelo de Alianza y Dos Vías de Contratación" caption="Partner Agreement" />
+
+          <div className="mt-6 grid grid-cols-1 lg:grid-cols-2 gap-4">
+            {/* VÍA I · RETAINER */}
+            <div className="bg-[#0d0d0e] border border-white/5 p-6 flex flex-col gap-5" style={{ borderTop: `2px solid ${GOLD}` }}>
+              <div className="flex items-center gap-2.5">
+                <Repeat className="h-4 w-4 shrink-0" style={{ color: GOLD }} aria-hidden="true" />
+                <div>
+                  <span className="font-mono text-[10px] uppercase tracking-[0.2em] block" style={{ color: GOLD }}>
+                    Vía I · Suscripción Ejecutiva Permanente
+                  </span>
+                  <span className="font-mono text-[10px] text-gray-500">Retainer de Custodia</span>
+                </div>
+              </div>
+              <ul className="divide-y divide-white/5 border-y border-white/5">
+                {RETAINER.map((r) => (
+                  <li key={r.band} className="flex items-center justify-between gap-3 py-3">
+                    <span className="text-[12px] text-gray-300 font-light">{r.band}</span>
+                    <span className="font-mono text-[13px] font-bold" style={{ color: GOLD }}>
+                      {r.fee}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+              <p className="font-mono text-[11px] text-gray-400 leading-relaxed">
+                Permanencia indexada de <span style={{ color: GOLD }}>10 meses</span> mientras exista contingencia
+                pericial activa.
+              </p>
+            </div>
+
+            {/* VÍA II · A ÉXITO */}
+            <div className="bg-[#0d0d0e] border border-white/5 p-6 flex flex-col gap-5" style={{ borderTop: `2px solid ${EMERALD}` }}>
+              <div className="flex items-center gap-2.5">
+                <Percent className="h-4 w-4 shrink-0" style={{ color: EMERALD }} aria-hidden="true" />
+                <div>
+                  <span className="font-mono text-[10px] uppercase tracking-[0.2em] block" style={{ color: EMERALD }}>
+                    Vía II · Liquidación por Intercepción Puntual
+                  </span>
+                  <span className="font-mono text-[10px] text-gray-500">Honorarios a Éxito</span>
+                </div>
+              </div>
+              <ul className="divide-y divide-white/5 border-y border-white/5">
+                {SUCCESS_SCALE.map((s) => (
+                  <li key={s.tramo} className="flex items-center justify-between gap-3 py-3">
+                    <div className="flex flex-col">
+                      <span className="text-[12px] text-gray-300 font-light">{s.tramo}</span>
+                      <span className="font-mono text-[10px] text-gray-500">{s.note}</span>
+                    </div>
+                    <span className="font-mono text-[15px] font-bold" style={{ color: EMERALD }}>
+                      {s.rate}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+              <p className="flex items-start gap-2 font-mono text-[11px] leading-relaxed" style={{ color: BLUE }}>
+                <Zap className="h-3.5 w-3.5 mt-px shrink-0" aria-hidden="true" />
+                <span>
+                  Bonificación Pronto Pago <span className="font-bold">&lt; 72 h</span>: reducción de{' '}
+                  <span className="font-bold">5 puntos porcentuales absolutos</span> sobre la tasa nominal.
+                </span>
+              </p>
+            </div>
+          </div>
+
+          <a
+            href={`mailto:${EMAIL}?subject=${encodeURIComponent('ACTIVACIÓN PROTOCOLO DE INTERVENCIÓN · PRIMAFRIO SL')}`}
+            className="mt-6 w-full flex items-center justify-center gap-3 px-6 py-4 font-sans font-bold text-[13px] uppercase tracking-[0.12em] rounded transition-opacity hover:opacity-90 text-center"
+            style={{ backgroundColor: GOLD, color: '#000' }}
+          >
+            <Handshake className="h-4 w-4 shrink-0" aria-hidden="true" />
+            Activar Protocolo de Intervención y Firmar Alianza de Rescate
+          </a>
+
+          <a
+            href={`mailto:${EMAIL}`}
+            className="mt-4 flex items-center justify-center gap-2 font-mono text-[12px] tracking-[0.06em] transition-opacity hover:opacity-80"
+            style={{ color: GOLD }}
+          >
+            <Mail className="h-3.5 w-3.5" aria-hidden="true" />
+            {EMAIL}
+          </a>
+        </section>
+
+        <footer className="pt-6 border-t border-white/5 grid grid-cols-1 sm:grid-cols-3 gap-3 font-mono text-[9px] tracking-[0.14em]">
+          <span style={{ color: EMERALD }}>IAE 1-8431 · CNAE 7020-7022</span>
+          <span className="sm:text-center text-gray-500">CGVV · CEO — MD | DSR · CAAO</span>
+          <span className="sm:text-right text-gray-600">© Luxe Vela Privé Strategic Consulting SL</span>
         </footer>
       </main>
+    </div>
+  )
+}
+
+/* ---------- SUBCOMPONENTES ---------- */
+
+function DonutChart({ data }: { data: ReadonlyArray<{ key: string; pct: number; tone: string }> }) {
+  const size = 168
+  const stroke = 26
+  const radius = (size - stroke) / 2
+  const circumference = 2 * Math.PI * radius
+  let cumulative = 0
+
+  return (
+    <div className="relative shrink-0" style={{ width: size, height: size }}>
+      <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} role="img" aria-label="Distribución porcentual de la sangría estructural">
+        <circle
+          cx={size / 2}
+          cy={size / 2}
+          r={radius}
+          fill="none"
+          stroke="rgba(255,255,255,0.05)"
+          strokeWidth={stroke}
+        />
+        {data.map((d) => {
+          const seg = (d.pct / 100) * circumference
+          const dashArray = `${seg} ${circumference - seg}`
+          const dashOffset = -(cumulative / 100) * circumference
+          cumulative += d.pct
+          return (
+            <circle
+              key={d.key}
+              cx={size / 2}
+              cy={size / 2}
+              r={radius}
+              fill="none"
+              stroke={d.tone}
+              strokeWidth={stroke}
+              strokeDasharray={dashArray}
+              strokeDashoffset={dashOffset}
+              strokeLinecap="butt"
+              transform={`rotate(-90 ${size / 2} ${size / 2})`}
+            />
+          )
+        })}
+      </svg>
+      <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
+        <span className="font-mono text-[9px] uppercase tracking-[0.2em] text-gray-500">Masa</span>
+        <span className="text-[15px] font-light text-white leading-tight">100 %</span>
+        <span className="font-mono text-[9px] text-gray-500">sangría</span>
+      </div>
+    </div>
+  )
+}
+
+function HeaderCell({
+  label,
+  value,
+  note,
+  valueTone = '#ffffff',
+}: {
+  label: string
+  value: string
+  note?: string
+  valueTone?: string
+}) {
+  return (
+    <div className="bg-[#0d0d0e] px-5 py-4 flex flex-col gap-1">
+      <span className="font-mono text-[9px] uppercase tracking-[0.18em] text-gray-500">{label}</span>
+      <span className="text-[15px] font-light" style={{ color: valueTone }}>
+        {value}
+      </span>
+      {note && <span className="font-mono text-[10px] text-gray-500">{note}</span>}
+    </div>
+  )
+}
+
+function SectionTitle({ index, title, caption }: { index: string; title: string; caption?: string }) {
+  return (
+    <div className="flex items-baseline gap-4 border-b pb-3" style={{ borderColor: `${GOLD}22` }}>
+      <span className="font-mono text-[11px] font-bold" style={{ color: GOLD }}>
+        {index}
+      </span>
+      <div className="flex flex-col">
+        <h2 className="text-lg sm:text-xl font-light tracking-tight text-white text-balance">{title}</h2>
+        {caption && (
+          <span className="font-mono text-[9px] uppercase tracking-[0.22em] text-gray-500 mt-1">{caption}</span>
+        )}
+      </div>
     </div>
   )
 }
