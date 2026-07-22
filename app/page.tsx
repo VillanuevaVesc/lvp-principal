@@ -1,23 +1,6 @@
 "use client"
 
 import React, { useState } from "react"
-import {
-  Shield,
-  Lock,
-  Terminal,
-  CheckCircle2,
-  AlertCircle,
-  ArrowRight,
-  Eye,
-  EyeOff,
-  AlertTriangle,
-  FileText,
-  Clock,
-  TrendingDown,
-  TrendingUp,
-  XCircle,
-  CheckSquare
-} from "lucide-react"
 
 const CONFIG_TOKENS = {
   CLIENTE: "LVP-OMEGA-1307-PRMF-926B",
@@ -39,7 +22,7 @@ const SANGRIAS_MENSUALES = [
   { mes: "Dic", acumulado: 1850.00 },
 ]
 
-export default function home() {
+export default function Home() {
   const [tokenInput, setTokenInput] = useState("")
   const [showPassword, setShowPassword] = useState(false)
   const [status, setStatus] = useState<"idle" | "loading" | "success_cliente" | "success_autor" | "error">("idle")
@@ -65,11 +48,12 @@ export default function home() {
   }
 
   return (
-    <main className="min-h-screen bg-[#040507] text-slate-200 py-6 px-4 flex items-center justify-center">
-      <div className="w-full max-w-6xl mx-auto bg-[#060709] border border-[#2a3241] rounded-lg shadow-2xl overflow-hidden font-sans">
+    <main className="min-h-screen bg-[#040507] text-slate-200 py-6 px-4 flex items-center justify-center font-sans">
+      <div className="w-full max-w-6xl mx-auto bg-[#060709] border border-[#2a3241] rounded-lg shadow-2xl overflow-hidden">
+        
+        {/* CABECERA */}
         <div className="bg-[#0f131c] border-b border-[#2a3241] px-6 py-4 flex items-center justify-between">
           <div className="flex items-center space-x-3">
-            <Terminal className="w-5 h-5 text-[#c5a059]" />
             <span className="text-xs tracking-widest text-[#c5a059] uppercase font-mono font-bold">
               LUXE VELA PRIVÉ // TERMINAL DE AUDITORÍA DE AUTOR LVP-OMEGA v3.1
             </span>
@@ -80,12 +64,10 @@ export default function home() {
           </div>
         </div>
 
+        {/* LOGIN FORM */}
         {status !== "success_cliente" && status !== "success_autor" && (
           <div className="p-10">
             <div className="max-w-xl mx-auto text-center mb-8">
-              <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-[#161a22] border border-[#c5a059]/30 mb-4">
-                <Lock className="w-6 h-6 text-[#c5a059]" />
-              </div>
               <h2 className="text-xl font-semibold text-white tracking-wide uppercase font-mono">
                 Acceso a Dictamen Pericial Exógeno
               </h2>
@@ -107,16 +89,15 @@ export default function home() {
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300 transition-colors"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300 transition-colors text-xs font-mono"
                 >
-                  {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                  {showPassword ? "OCULTAR" : "VER"}
                 </button>
               </div>
 
               {status === "error" && (
-                <div className="flex items-center space-x-2 text-rose-400 bg-rose-950/30 border border-rose-800/50 rounded p-3 text-xs font-mono">
-                  <AlertCircle className="w-4 h-4 shrink-0" />
-                  <span>{errorMessage}</span>
+                <div className="text-rose-400 bg-rose-950/30 border border-rose-800/50 rounded p-3 text-xs font-mono">
+                  {errorMessage}
                 </div>
               )}
 
@@ -125,29 +106,20 @@ export default function home() {
                 disabled={status === "loading" || !tokenInput.trim()}
                 className="w-full bg-[#c5a059] hover:bg-[#b38f48] disabled:opacity-50 text-black font-semibold text-xs tracking-wider uppercase rounded py-3 px-4 flex items-center justify-center space-x-2 transition-colors cursor-pointer font-mono"
               >
-                {status === "loading" ? (
-                  <span>DECODIFICANDO EXPEDIENTE FORENSE...</span>
-                ) : (
-                  <>
-                    <span>Establecer Enlace Seguro</span>
-                    <ArrowRight className="w-4 h-4" />
-                  </>
-                )}
+                {status === "loading" ? "DECODIFICANDO EXPEDIENTE FORENSE..." : "Establecer Enlace Seguro"}
               </button>
             </form>
           </div>
         )}
 
+        {/* AUDITORÍA PRIMAFRIO SL */}
         {status === "success_cliente" && (
           <div className="p-8 space-y-8">
             <div className="bg-[#0f131c] border border-emerald-500/40 rounded p-4 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
               <div>
-                <div className="flex items-center space-x-2">
-                  <CheckCircle2 className="w-5 h-5 text-emerald-400" />
-                  <h3 className="text-sm font-bold text-white uppercase font-mono tracking-wider">
-                    EXPEDIENTE DE AUDITORÍA: PRIMAFRIO SL (NIF/CIF: B73047599)
-                  </h3>
-                </div>
+                <h3 className="text-sm font-bold text-white uppercase font-mono tracking-wider">
+                  EXPEDIENTE DE AUDITORÍA: PRIMAFRIO SL (NIF/CIF: B73047599)
+                </h3>
                 <p className="text-xs text-slate-400 font-mono mt-1">
                   Masa Patrimonial Base: <span className="text-white">6.223.386,00 €</span> | Filiales Afectadas: <span className="text-white">Doctrans Lda. (100%) / Lamision Lda. (1,3%)</span>
                 </p>
@@ -160,53 +132,40 @@ export default function home() {
               </div>
             </div>
 
+            {/* METRICAS */}
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-              <div className="bg-[#0f131c] border border-rose-900/60 p-4 rounded relative overflow-hidden">
+              <div className="bg-[#0f131c] border border-rose-900/60 p-4 rounded">
                 <span className="text-[10px] text-rose-400 font-mono uppercase tracking-widest block font-bold">DRAIN MENSUAL (ROJO)</span>
                 <div className="text-2xl font-bold text-rose-500 font-mono mt-1">-154.166,67 €</div>
                 <span className="text-[10px] text-slate-400 mt-1 block">Pérdida viva cada 30 días</span>
-                <div className="absolute top-3 right-3 text-rose-500/30">
-                  <TrendingDown className="w-6 h-6" />
-                </div>
               </div>
 
-              <div className="bg-[#0f131c] border border-rose-800 p-4 rounded relative overflow-hidden">
+              <div className="bg-[#0f131c] border border-rose-800 p-4 rounded">
                 <span className="text-[10px] text-rose-400 font-mono uppercase tracking-widest block font-bold">EROSIÓN ANUALIZADA</span>
                 <div className="text-2xl font-bold text-rose-500 font-mono mt-1">-1.850.000,00 €</div>
                 <span className="text-[10px] text-slate-400 mt-1 block">Erosión contable acumulada</span>
-                <div className="absolute top-3 right-3 text-rose-500/30">
-                  <XCircle className="w-6 h-6" />
-                </div>
               </div>
 
-              <div className="bg-[#0f131c] border border-amber-900/60 p-4 rounded relative overflow-hidden">
+              <div className="bg-[#0f131c] border border-amber-900/60 p-4 rounded">
                 <span className="text-[10px] text-amber-400 font-mono uppercase tracking-widest block font-bold">SECUESTRO LIQUIDEZ (FLOAT)</span>
                 <div className="text-2xl font-bold text-amber-400 font-mono mt-1">245.000,00 €</div>
                 <span className="text-[10px] text-slate-400 mt-1 block">Inmovilizado aduanero e-CMR</span>
-                <div className="absolute top-3 right-3 text-amber-500/30">
-                  <AlertTriangle className="w-6 h-6" />
-                </div>
               </div>
 
-              <div className="bg-[#0f131c] border border-emerald-500/70 p-4 rounded relative overflow-hidden bg-emerald-950/10">
+              <div className="bg-[#0f131c] border border-emerald-500/70 p-4 rounded bg-emerald-950/10">
                 <span className="text-[10px] text-emerald-400 font-mono uppercase tracking-widest block font-bold">MEJORA EBITDA NETO</span>
                 <div className="text-2xl font-bold text-emerald-400 font-mono mt-1">+2,4% NETO</div>
                 <span className="text-[10px] text-emerald-300 mt-1 block font-mono">Inyección directa al resultado</span>
-                <div className="absolute top-3 right-3 text-emerald-400/40">
-                  <TrendingUp className="w-6 h-6" />
-                </div>
               </div>
             </div>
 
+            {/* GRAFICAS Y PANELES */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               <div className="bg-[#0f131c] border border-[#2a3241] rounded p-5 space-y-4">
                 <div className="flex justify-between items-center border-b border-[#2a3241] pb-3">
-                  <div className="flex items-center space-x-2">
-                    <TrendingDown className="w-4 h-4 text-rose-500" />
-                    <h4 className="text-xs font-bold text-rose-400 font-mono uppercase tracking-wider">
-                      CURVA DE DRENAJE EN EBITDA DE PRIMAFRIO SL (ACUMULADO ANUAL)
-                    </h4>
-                  </div>
+                  <h4 className="text-xs font-bold text-rose-400 font-mono uppercase tracking-wider">
+                    CURVA DE DRENAJE EN EBITDA DE PRIMAFRIO SL (ACUMULADO ANUAL)
+                  </h4>
                   <span className="text-[10px] font-mono text-rose-400 bg-rose-950/60 border border-rose-800/60 px-2 py-0.5 rounded">
                     -1.850.000,00 €/año
                   </span>
@@ -235,12 +194,9 @@ export default function home() {
 
               <div className="bg-[#0f131c] border border-emerald-500/30 rounded p-5 space-y-4 bg-emerald-950/5">
                 <div className="flex justify-between items-center border-b border-[#2a3241] pb-3">
-                  <div className="flex items-center space-x-2">
-                    <TrendingUp className="w-4 h-4 text-emerald-400" />
-                    <h4 className="text-xs font-bold text-emerald-400 font-mono uppercase tracking-wider">
-                      INYECCIÓN POSITIVA EN CUENTAS DE EXPLOTACIÓN (RESCATE NETO)
-                    </h4>
-                  </div>
+                  <h4 className="text-xs font-bold text-emerald-400 font-mono uppercase tracking-wider">
+                    INYECCIÓN POSITIVA EN CUENTAS DE EXPLOTACIÓN (RESCATE NETO)
+                  </h4>
                   <span className="text-[10px] font-mono text-emerald-400 bg-emerald-950 border border-emerald-700 px-2 py-0.5 rounded">
                     +1.850.000,00 € RECUPERADOS
                   </span>
@@ -290,19 +246,16 @@ export default function home() {
               </div>
             </div>
 
+            {/* CHECKLIST */}
             <div className="bg-[#0f131c] border border-[#2a3241] rounded p-6 space-y-6">
-              <div className="flex items-center space-x-2 border-b border-[#2a3241] pb-3">
-                <CheckSquare className="w-5 h-5 text-[#c5a059]" />
-                <h4 className="text-xs font-bold text-white uppercase font-mono tracking-wider">
-                  CHECKLIST DE ASIMETRÍAS LOCALIZADAS EN PRIMAFRIO SL Y MATRIZ DE REINGENIERÍA
-                </h4>
-              </div>
+              <h4 className="text-xs font-bold text-white uppercase font-mono tracking-wider border-b border-[#2a3241] pb-3">
+                CHECKLIST DE ASIMETRÍAS LOCALIZADAS EN PRIMAFRIO SL Y MATRIZ DE REINGENIERÍA
+              </h4>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
                 <div className="bg-[#141923] border border-rose-900/40 p-4 rounded space-y-2">
-                  <div className="flex items-center space-x-2 text-rose-400 font-mono font-bold">
-                    <XCircle className="w-4 h-4 shrink-0" />
-                    <span>01. Asimetría de Tarifa €/Km en Corredor Europeo</span>
+                  <div className="text-rose-400 font-mono font-bold">
+                    01. Asimetría de Tarifa €/Km en Corredor Europeo
                   </div>
                   <p className="text-slate-300 leading-relaxed text-[11px]">
                     <strong>Punto de Fuga:</strong> Descalces analógicos entre las tarifas aplicadas por km y la fluctuación de los costes reales de la flota transfronteriza europea.
@@ -313,9 +266,8 @@ export default function home() {
                 </div>
 
                 <div className="bg-[#141923] border border-rose-900/40 p-4 rounded space-y-2">
-                  <div className="flex items-center space-x-2 text-rose-400 font-mono font-bold">
-                    <XCircle className="w-4 h-4 shrink-0" />
-                    <span>02. Retraso en Transición Digital e-CMR</span>
+                  <div className="text-rose-400 font-mono font-bold">
+                    02. Retraso en Transición Digital e-CMR
                   </div>
                   <p className="text-slate-300 leading-relaxed text-[11px]">
                     <strong>Punto de Fuga:</strong> Penalizaciones cruzadas, demoras administrativas en aduanas y secuestro temporal de liquidez (Float Hijacking) por documentación analógica.
@@ -326,9 +278,8 @@ export default function home() {
                 </div>
 
                 <div className="bg-[#141923] border border-rose-900/40 p-4 rounded space-y-2">
-                  <div className="flex items-center space-x-2 text-rose-400 font-mono font-bold">
-                    <XCircle className="w-4 h-4 shrink-0" />
-                    <span>03. Descalce Contable con Filial Doctrans Lda.</span>
+                  <div className="text-rose-400 font-mono font-bold">
+                    03. Descalce Contable con Filial Doctrans Lda.
                   </div>
                   <p className="text-slate-300 leading-relaxed text-[11px]">
                     <strong>Punto de Fuga:</strong> Falta de cointegración perfecta en las liquidaciones internas de tracción entre la matriz española y la filial portuguesa (100%).
@@ -339,9 +290,8 @@ export default function home() {
                 </div>
 
                 <div className="bg-[#141923] border border-rose-900/40 p-4 rounded space-y-2">
-                  <div className="flex items-center space-x-2 text-rose-400 font-mono font-bold">
-                    <XCircle className="w-4 h-4 shrink-0" />
-                    <span>04. Volatilidad de Recargo de Combustible (Fuel)</span>
+                  <div className="text-rose-400 font-mono font-bold">
+                    04. Volatilidad de Recargo de Combustible (Fuel)
                   </div>
                   <p className="text-slate-300 leading-relaxed text-[11px]">
                     <strong>Punto de Fuga:</strong> Desfase temporal en la repercusión dinámica del coste de hidrocarburos sobre el flujo diario de rutas de larga distancia.
@@ -353,10 +303,10 @@ export default function home() {
               </div>
             </div>
 
+            {/* CONDICIONES */}
             <div className="bg-amber-950/10 border border-amber-500/30 rounded p-5 space-y-3 font-mono text-xs">
-              <div className="flex items-center space-x-2 text-amber-400 font-bold uppercase">
-                <Clock className="w-4 h-4" />
-                <span>RESERVA DE EJECUCIÓN C-SUITE Y CONDICIONES LIQUIDATIVAS (LEY 1/2019)</span>
+              <div className="text-amber-400 font-bold uppercase">
+                RESERVA DE EJECUCIÓN C-SUITE Y CONDICIONES LIQUIDATIVAS (LEY 1/2019)
               </div>
               <p className="text-slate-300 text-[11px] leading-relaxed text-justify font-sans">
                 De acuerdo con la Ley 1/2019 de Secretos Empresariales, el código algorítmico, las fórmulas de cointegración y el soporte de ejecución pericial para detener la sangría se activarán **únicamente tras la firma del expediente y liquidación de honorarios**.
@@ -365,20 +315,6 @@ export default function home() {
                 <div>• <strong className="text-white">Ventana Pronto Pago (T0 + 15 días):</strong> 185.000,00 € netos (Ahorro directo de 92.500 €).</div>
                 <div>• <strong className="text-white">Tarifa Nominal de Balance (Día 16 al 30):</strong> 277.500,00 € netos (15% sobre la herida).</div>
                 <div>• <strong className="text-white">Suscripción Ejecutiva Permanente (Vía I):</strong> 25.000,00 € / mes (Permanencia contractual de 10 meses).</div>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {status === "success_autor" && (
-          <div className="p-8 space-y-4">
-            <div className="bg-amber-950/20 border border-amber-500/30 rounded p-4 flex items-center justify-between">
-              <div className="flex items-center space-x-3">
-                <Shield className="w-6 h-6 text-amber-400 shrink-0" />
-                <div>
-                  <h3 className="text-sm font-bold text-white uppercase tracking-wider font-mono">MODO ESPEJO / CONTROL INTERNO LVP</h3>
-                  <p className="text-xs text-amber-400 font-mono mt-0.5">Visado del Administrador Único [CEO-MD-CVV] y CAAO Dora Sánchez Remus.</p>
-                </div>
               </div>
             </div>
           </div>
