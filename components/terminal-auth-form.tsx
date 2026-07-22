@@ -1,7 +1,7 @@
 "use client"
 
 import React, { useState } from "react"
-import { Shield, Lock, Terminal, CheckCircle2, AlertCircle, ArrowRight, Eye, EyeOff, TrendingUp, AlertTriangle, FileText } from "lucide-react"
+import { Shield, Lock, Terminal, CheckCircle2, AlertCircle, ArrowRight, Eye, EyeOff, AlertTriangle, FileText } from "lucide-react"
 
 const CONFIG_TOKENS = {
   CLIENTE: "LVP-OMEGA-1307-PRMF-926B",
@@ -28,9 +28,9 @@ export default function TerminalAuthForm() {
         setStatus("success_autor")
       } else {
         setStatus("error")
-        setErrorMessage("TOKEN DE ACCESO NO VÁLIDO O CADUCADO. REVISE SUS CREDENCIALES OTP.")
+        setErrorMessage("AUTENTICACIÓN RECHAZADA. CLAVE OTP ENCRIPTADA NO CONCORDANTE CON EL EXPEDIENTE.")
       }
-    }, 500)
+    }, 400)
   }
 
   return (
@@ -49,7 +49,7 @@ export default function TerminalAuthForm() {
         </div>
       </div>
 
-      {/* LOGIN / OTP */}
+      {/* FORMULARIO DE ACCESO OTP */}
       {status !== "success_cliente" && status !== "success_autor" && (
         <div className="p-10">
           <div className="max-w-xl mx-auto text-center mb-8">
@@ -57,10 +57,10 @@ export default function TerminalAuthForm() {
               <Lock className="w-6 h-6 text-[#c5a059]" />
             </div>
             <h2 className="text-xl font-semibold text-white tracking-wide uppercase">
-              Acceso a Dictamen de Autor
+              Acceso a Dictamen Pericial de Autor
             </h2>
             <p className="text-xs text-slate-400 mt-2">
-              Introduzca su clave de acceso de un solo uso (OTP) para acceder al expediente pericial.
+              Introduzca su clave de acceso única de un solo uso (OTP) para validar el expediente.
             </p>
           </div>
 
@@ -99,7 +99,7 @@ export default function TerminalAuthForm() {
                 <span>DECODIFICANDO EXPEDIENTE...</span>
               ) : (
                 <>
-                  <span>Establecer Enlace Seguro</span>
+                  <span>ESTABLECER ENLACE SEGURO</span>
                   <ArrowRight className="w-4 h-4" />
                 </>
               )}
@@ -108,16 +108,15 @@ export default function TerminalAuthForm() {
         </div>
       )}
 
-      {/* DESBLOQUEADO: VISTA REAL PRIMAFRIO SL */}
+      {/* VISTA REAL DEL CLIENTE (PRIMAFRIO SL) */}
       {status === "success_cliente" && (
         <div className="p-8 space-y-6">
-          {/* Status Header */}
           <div className="bg-emerald-950/20 border border-emerald-500/30 rounded p-4 flex items-center justify-between">
             <div className="flex items-center space-x-3">
               <CheckCircle2 className="w-6 h-6 text-emerald-400 shrink-0" />
               <div>
                 <h3 className="text-sm font-bold text-white uppercase tracking-wider">
-                  SUJETO DE ANÁLSIIS: PRIMAFRIO SL (NIF: B73047599)
+                  SUJETO DE ANÁLISIS: PRIMAFRIO SL (NIF/CIF: B73047599)
                 </h3>
                 <p className="text-xs text-emerald-400 font-mono mt-0.5">
                   EXPEDIENTE: EXP-PRMF-20260713 // DICTAMEN PERICIAL DESBLOQUEADO
@@ -129,7 +128,7 @@ export default function TerminalAuthForm() {
             </span>
           </div>
 
-          {/* Tarjetas Métricas Principales */}
+          {/* Tarjetas Métricas */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="bg-[#12161f] border border-[#2a3241] p-5 rounded">
               <span className="text-[10px] text-slate-400 font-mono uppercase tracking-widest">EROSIÓN NETA DEL MARGEN</span>
@@ -145,12 +144,12 @@ export default function TerminalAuthForm() {
 
             <div className="bg-[#12161f] border border-[#2a3241] p-5 rounded">
               <span className="text-[10px] text-[#c5a059] font-mono uppercase tracking-widest">IMPACTO EN EBITDA CONSOLIDADO</span>
-              <div className="text-2xl font-bold text-emerald-400 font-mono mt-1">+0,34% NETO</div>
-              <p className="text-[11px] text-slate-500 mt-1">Recuperación directa en el resultado de explotación</p>
+              <div className="text-2xl font-bold text-emerald-400 font-mono mt-1">+2,4% NETO</div>
+              <p className="text-[11px] text-slate-500 mt-1">Inyección directa e inmediata en el resultado de explotación</p>
             </div>
           </div>
 
-          {/* Detalle Técnico del Vector Afectado */}
+          {/* Detalle Técnico */}
           <div className="bg-[#12161f] border border-[#2a3241] rounded p-6 space-y-4">
             <div className="flex items-center space-x-2 border-b border-[#2a3241] pb-3">
               <AlertTriangle className="w-5 h-5 text-[#c5a059]" />
@@ -159,14 +158,14 @@ export default function TerminalAuthForm() {
               </h4>
             </div>
             <p className="text-xs text-slate-300 leading-relaxed text-justify">
-              Fuga financiera localizada en la cuenta de pérdidas y ganancias, provocada por descalces y asimetrías de liquidación en las tarifas por kilómetro de las flotas transfronterizas europeas (incluyendo la alineación con la filial <span className="text-white font-mono">Doctrans Transportes Rodoviários Lda.</span>), ante la falta de una integración masiva y homogénea del e-CMR obligatorio en aduanas.
+              Fuga financiera localizada en la cuenta de pérdidas y ganancias, provocada por descalces y asimetrías de liquidación en las tarifas por kilómetro de las flotas transfronterizas europeas (incluyendo la alineación con la filial <span className="text-white font-mono">Doctrans Transportes Rodoviários Lda.</span>), ante la falta de una integración masiva, homogénea y digital del e-CMR obligatorio.
             </p>
             <p className="text-xs text-slate-400 leading-relaxed text-justify">
-              Esto genera incidencias de valoración contable, penalizaciones cruzadas y retrasos administrativos en la cadena de frío que erosionan silenciosamente su margen operativo.
+              Esto genera incidencias de valoración contable, penalizaciones cruzadas e inevitables retrasos administrativos en la cadena de frío que erosionan silenciosamente su margen de beneficio neto.
             </p>
           </div>
 
-          {/* Cuadro de Capas Exógenas Analizadas */}
+          {/* Capas de Auditoría */}
           <div className="space-y-3">
             <h4 className="text-xs font-mono text-[#c5a059] uppercase tracking-wider flex items-center space-x-2">
               <FileText className="w-4 h-4" />
@@ -175,22 +174,22 @@ export default function TerminalAuthForm() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
               <div className="bg-[#12161f] border border-[#242c3d] p-4 rounded space-y-1">
                 <div className="text-[#c5a059] font-mono font-bold">CAPA I: Volatilidad Hidrocarburífera</div>
-                <div className="text-slate-300">Ineficiencias temporales en la aplicación dinámica de recargos por combustible (fuel) en rutas europeas sobre la masa de capital base (6.223.386,00 €).</div>
+                <div className="text-slate-300">Ineficiencias temporales en la aplicación dinámica de recargos por combustible (fuel) sobre la masa patrimonial base de 6.223.386,00 €.</div>
               </div>
 
               <div className="bg-[#12161f] border border-[#242c3d] p-4 rounded space-y-1">
                 <div className="text-[#c5a059] font-mono font-bold">CAPA II: Cointegración Filiales</div>
-                <div className="text-slate-300">Descalces en liquidaciones internas de flete por km entre la matriz nacional y la red transfronteriza (Doctrans Lda. 100%).</div>
+                <div className="text-slate-300">Descalces de posicionamiento y flete por km con la filial Doctrans Lda. (100%).</div>
               </div>
 
               <div className="bg-[#12161f] border border-[#242c3d] p-4 rounded space-y-1">
                 <div className="text-[#c5a059] font-mono font-bold">CAPA III: Subvenciones y Fondos EU</div>
-                <div className="text-slate-300">Coste de oportunidad en la ejecución y amortización de 454.575,00 € asignados a proyectos Zero Emission & Logistic Intelligence.</div>
+                <div className="text-slate-300">Coste de oportunidad en la ejecución de los 454.575,00 € captados en proyectos Zero Emission & Logistic Intelligence.</div>
               </div>
 
               <div className="bg-[#12161f] border border-[#242c3d] p-4 rounded space-y-1">
                 <div className="text-[#c5a059] font-mono font-bold">CAPA V: Simulación Fiscal EBITDA</div>
-                <div className="text-slate-300">Optimización sobre la partida de Consumos y Servicios Subcontratados de Transporte, deteniendo un drenaje de 154.166,67 €/mes.</div>
+                <div className="text-slate-300">Recorte directo sobre la partida de Consumos Externos y Fletes Subcontratados, inyectando +2,4% en el EBITDA consolidado (+1.850.000,00 €/año).</div>
               </div>
             </div>
           </div>
@@ -205,7 +204,7 @@ export default function TerminalAuthForm() {
               <Shield className="w-6 h-6 text-amber-400 shrink-0" />
               <div>
                 <h3 className="text-sm font-bold text-white uppercase tracking-wider">MODO ESPEJO / CONTROL INTERNO LVP</h3>
-                <p className="text-xs text-amber-400 font-mono mt-0.5">Acceso Master autorizado para revisión técnica.</p>
+                <p className="text-xs text-amber-400 font-mono mt-0.5">Acceso Master autorizado para revisión de la firma.</p>
               </div>
             </div>
           </div>
