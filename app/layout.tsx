@@ -1,35 +1,61 @@
-import type { Metadata } from "next"
-import { Inter, Geist_Mono } from "next/font/google"
-import type React from "react"
-import "./globals.css"
+import { Analytics } from '@vercel/analytics/next'
+import type { Metadata, Viewport } from 'next'
+import { Inter, Roboto_Mono } from 'next/font/google'
+import './globals.css'
+import { I18nProvider } from '@/lib/i18n/context'
 
 const inter = Inter({
-  subsets: ["latin"],
-  variable: "--font-inter",
-  display: "swap",
+  variable: '--font-inter',
+  subsets: ['latin'],
+  display: 'swap',
 })
 
-const geistMono = Geist_Mono({
-  subsets: ["latin"],
-  variable: "--font-geist-mono",
-  display: "swap",
+const robotoMono = Roboto_Mono({
+  variable: '--font-roboto-mono',
+  subsets: ['latin'],
+  display: 'swap',
 })
 
 export const metadata: Metadata = {
-  title: "LUXE VELA PRIVE STRATEGIC CONSULTING SL — LVP-OMEGA v3.0",
+  title: 'Luxe Vela Prive Strategic Consulting SL',
   description:
-    "Operación de alta dirección: infraestructura de transporte y reclamación pericial exógena. Framework de control econométrico LVP-OMEGA v3.0.",
-  generator: "v0.app",
+    'Inferencia soberana, gobernanza y cumplimiento regulatorio para estructuras de alta dirección.',
+  generator: 'v0.app',
+  icons: {
+    icon: [
+      {
+        url: '/icon-light-32x32.png',
+        media: '(prefers-color-scheme: light)',
+      },
+      {
+        url: '/icon-dark-32x32.png',
+        media: '(prefers-color-scheme: dark)',
+      },
+      {
+        url: '/icon.svg',
+        type: 'image/svg+xml',
+      },
+    ],
+    apple: '/apple-icon.png',
+  },
+}
+
+export const viewport: Viewport = {
+  colorScheme: 'dark',
+  themeColor: '#0A1128',
 }
 
 export default function RootLayout({
   children,
-}: {
+}: Readonly<{
   children: React.ReactNode
-}) {
+}>) {
   return (
-    <html lang="es" className={`bg-background ${inter.variable} ${geistMono.variable}`}>
-      <body className="font-sans antialiased bg-background text-foreground">{children}</body>
+    <html lang="es" className={`${inter.variable} ${robotoMono.variable} bg-background`}>
+      <body className="bg-background font-sans antialiased">
+        <I18nProvider>{children}</I18nProvider>
+        {process.env.NODE_ENV === 'production' && <Analytics />}
+      </body>
     </html>
   )
 }

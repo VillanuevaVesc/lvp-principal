@@ -1,78 +1,36 @@
-"use client"
+'use client'
 
-import { useSite, type Tab } from "./site-provider"
-import { LANGS, LANG_SHORT, type Lang } from "@/lib/content"
+import { useI18n } from '@/lib/i18n/context'
+import { LanguageSelector } from './language-selector'
 
 export function SiteHeader() {
-  const { t, lang, setLang, tab, setTab } = useSite()
-
-  const tabs: { key: Tab; label: string }[] = [
-    { key: "home", label: t.nav.home },
-    { key: "engine", label: t.nav.engine },
-    { key: "vectors", label: t.nav.vectors },
-    { key: "billing", label: t.nav.billing },
-    { key: "governance", label: t.nav.governance },
-  ]
+  const { t } = useI18n()
 
   return (
-    <header className="sticky top-0 z-50 border-b border-border bg-background/95 backdrop-blur">
-      {/* Status bar */}
-      <div className="flex items-center justify-between gap-4 border-b border-border/60 bg-card px-4 py-2">
-        <span className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground sm:text-xs">
-          {t.statusBar.brand}
-        </span>
-        <span className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-widest text-accent sm:text-xs">
-          <span className="h-2 w-2 animate-pulse rounded-full bg-accent" aria-hidden="true" />
-          {t.statusBar.status}
-        </span>
-      </div>
+    <header className="sticky top-0 z-40 w-full border-b border-border bg-background/85 backdrop-blur-md">
+      <div className="mx-auto flex h-20 w-full max-w-[1400px] items-center justify-between px-6 md:px-12">
+        <div className="flex items-center gap-4">
+          <div
+            aria-hidden="true"
+            className="flex h-9 w-9 items-center justify-center border border-gold-muted"
+          >
+            <span className="font-sans text-sm font-medium tracking-widest text-gold">
+              LV
+            </span>
+          </div>
+          <h1 className="font-sans text-[13px] font-medium tracking-[0.28em] text-foreground md:text-[15px]">
+            {t.header.company}
+          </h1>
+        </div>
 
-      <div className="mx-auto flex max-w-6xl flex-col gap-3 px-4 py-3 lg:flex-row lg:items-center lg:justify-between">
-        {/* Nav */}
-        <nav aria-label="Navegación principal" className="-mx-1 overflow-x-auto">
-          <ul className="flex min-w-max items-center gap-1">
-            {tabs.map((item) => {
-              const active = tab === item.key
-              return (
-                <li key={item.key}>
-                  <button
-                    type="button"
-                    onClick={() => setTab(item.key)}
-                    aria-current={active ? "page" : undefined}
-                    className={`rounded-sm px-3 py-2 font-mono text-xs font-medium uppercase tracking-wider transition-colors ${
-                      active
-                        ? "bg-accent/15 text-accent"
-                        : "text-muted-foreground hover:bg-muted hover:text-foreground"
-                    }`}
-                  >
-                    {item.label}
-                  </button>
-                </li>
-              )
-            })}
-          </ul>
-        </nav>
-
-        {/* Language selector */}
-        <div className="flex items-center gap-1" role="group" aria-label="Selector de idioma">
-          {LANGS.map((code: Lang) => {
-            const active = lang === code
-            return (
-              <button
-                key={code}
-                type="button"
-                onClick={() => setLang(code)}
-                aria-pressed={active}
-                className={`rounded-sm border px-2.5 py-1 font-mono text-xs font-semibold tracking-wider transition-colors ${
-                  active
-                    ? "border-accent bg-accent text-accent-foreground"
-                    : "border-border text-muted-foreground hover:border-accent/60 hover:text-foreground"
-                }`}
-              >
-                {LANG_SHORT[code]}
-              </button>
-            )
-          })}
+        <div className="flex items-center gap-4 lg:gap-6">
+          <span
+            className="hidden font-sans text-[11px] tracking-[0.22em] text-mist lg:inline"
+          >
+            {t.header.classification}
+          </span>
+          <span className="hidden h-3 w-px bg-gold-muted lg:inline-block" aria-hidden="true" />
+          <LanguageSelector />
         </div>
       </div>
     </header>

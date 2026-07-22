@@ -1,27 +1,37 @@
-"use client"
+'use client'
 
-import { useSite } from "./site-provider"
+import { useI18n } from '@/lib/i18n/context'
 
 export function SiteFooter() {
-  const { t } = useSite()
-  const f = t.footer
+  const { footer } = useI18n().t
 
   return (
-    <footer className="mt-16 border-t border-border bg-card">
-      <div className="mx-auto max-w-6xl px-4 py-10">
-        <div className="grid gap-6 md:grid-cols-3">
-          {f.lines.map((line, i) => (
-            <div key={i}>
-              <h3 className="font-mono text-[11px] font-semibold uppercase tracking-widest text-accent">
-                {line.title}
-              </h3>
-              <p className="mt-3 text-xs leading-relaxed text-muted-foreground">{line.body}</p>
+    <footer className="border-t border-border bg-secondary">
+      <div className="mx-auto flex w-full max-w-[1400px] flex-col gap-8 px-6 py-14 md:px-12">
+        <div className="flex items-center gap-4">
+          <span className="font-sans text-[11px] tracking-[0.28em] text-gold">
+            {footer.block}
+          </span>
+          <span className="h-px w-12 bg-gold-muted" aria-hidden="true" />
+          <span className="font-sans text-[11px] tracking-[0.28em] text-mist">
+            {footer.perimeter}
+          </span>
+        </div>
+
+        <div className="flex flex-col gap-6">
+          {footer.sections.map((section, i) => (
+            <div
+              key={i}
+              className="flex flex-col gap-2 border-t border-border pt-6"
+            >
+              <span className="font-sans text-[11px] tracking-[0.18em] text-gold">
+                {section.label}
+              </span>
+              <p className="max-w-4xl text-pretty font-sans text-[12px] leading-relaxed text-mist">
+                {section.text}
+              </p>
             </div>
           ))}
-        </div>
-        <div className="mt-8 flex flex-col gap-2 border-t border-border pt-6 font-mono text-[10px] uppercase tracking-widest text-muted-foreground/70 sm:flex-row sm:items-center sm:justify-between">
-          <span>{f.legalLeft}</span>
-          <span>{f.legalRight}</span>
         </div>
       </div>
     </footer>
