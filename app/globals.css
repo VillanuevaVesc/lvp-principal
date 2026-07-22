@@ -1,0 +1,47 @@
+@import "tailwindcss";
+
+@theme inline {
+  --color-background: #000000;
+  --color-foreground: #e5e5e5;
+
+  --color-terminal-black: #000000;
+  --color-terminal-panel: #060709;
+  --color-terminal-elevated: #0f131c;
+  --color-terminal-line: #1e2430;
+
+  --color-white-pure: #ffffff;
+  --color-silver: #a3a3a3;
+  --color-silver-dim: #525252;
+  --color-body: #e5e5e5;
+  --color-body-soft: #cccccc;
+
+  --color-gold: #c5a059;
+  --color-gold-dim: #8a6f3c;
+
+  --color-alert: #ff0033;
+  --color-alert-dim: #7f1d2b;
+
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "Geist Mono", ui-monospace, monospace;
+}
+
+html {
+  background-color: #000000;
+  color-scheme: dark;
+}
+
+body {
+  background-color: #000000;
+  color: #e5e5e5;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Subtle terminal grid texture used sparingly for institutional panels */
+.terminal-hairline {
+  border-color: rgba(163, 163, 163, 0.1);
+}
+
+::selection {
+  background-color: #c5a059;
+  color: #000000;
+}
