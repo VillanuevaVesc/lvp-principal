@@ -24,20 +24,19 @@ const CONFIG_TOKENS = {
   AUTOR: "LVP-MASTER-BACKDOOR-AUDIT",
 } as const
 
-// Datos de la sangría mensual (154.166,67 € / mes) para la gráfica
 const SANGRIAS_MENSUALES = [
-  { mes: "Ene", mensual: 154.16, acumulado: 154.16 },
-  { mes: "Feb", mensual: 154.16, acumulado: 308.33 },
-  { mes: "Mar", mensual: 154.16, acumulado: 462.50 },
-  { mes: "Abr", mensual: 154.16, acumulado: 616.66 },
-  { mes: "May", mensual: 154.16, acumulado: 770.83 },
-  { mes: "Jun", mensual: 154.16, acumulado: 925.00 },
-  { mes: "Jul", mensual: 154.16, acumulado: 1079.16 },
-  { mes: "Ago", mensual: 154.16, acumulado: 1233.33 },
-  { mes: "Sep", mensual: 154.16, acumulado: 1387.50 },
-  { mes: "Oct", mensual: 154.16, acumulado: 1541.66 },
-  { mes: "Nov", mensual: 154.16, acumulado: 1695.83 },
-  { mes: "Dic", mensual: 154.16, acumulado: 1850.00 },
+  { mes: "Ene", acumulado: 154.16 },
+  { mes: "Feb", acumulado: 308.33 },
+  { mes: "Mar", acumulado: 462.50 },
+  { mes: "Abr", acumulado: 616.66 },
+  { mes: "May", acumulado: 770.83 },
+  { mes: "Jun", acumulado: 925.00 },
+  { mes: "Jul", acumulado: 1079.16 },
+  { mes: "Ago", acumulado: 1233.33 },
+  { mes: "Sep", acumulado: 1387.50 },
+  { mes: "Oct", acumulado: 1541.66 },
+  { mes: "Nov", acumulado: 1695.83 },
+  { mes: "Dic", acumulado: 1850.00 },
 ]
 
 export default function TerminalAuthForm() {
@@ -67,7 +66,6 @@ export default function TerminalAuthForm() {
 
   return (
     <div className="w-full max-w-6xl mx-auto bg-[#060709] text-slate-200 border border-[#2a3241] rounded-lg shadow-2xl overflow-hidden font-sans my-6">
-      {/* CABECERA LVP */}
       <div className="bg-[#0f131c] border-b border-[#2a3241] px-6 py-4 flex items-center justify-between">
         <div className="flex items-center space-x-3">
           <Terminal className="w-5 h-5 text-[#c5a059]" />
@@ -81,7 +79,6 @@ export default function TerminalAuthForm() {
         </div>
       </div>
 
-      {/* LOGIN OTP */}
       {status !== "success_cliente" && status !== "success_autor" && (
         <div className="p-10">
           <div className="max-w-xl mx-auto text-center mb-8">
@@ -140,10 +137,8 @@ export default function TerminalAuthForm() {
         </div>
       )}
 
-      {/* VISTA C-SUITE EXCLUSIVA PARA PRIMAFRIO SL */}
       {status === "success_cliente" && (
         <div className="p-8 space-y-8">
-          {/* Ficha de Identificación del Expediente */}
           <div className="bg-[#0f131c] border border-emerald-500/40 rounded p-4 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
             <div>
               <div className="flex items-center space-x-2">
@@ -164,7 +159,6 @@ export default function TerminalAuthForm() {
             </div>
           </div>
 
-          {/* KPI METRICAS DE SANGRÍA (ROJO) VS RECUPERACIÓN (VERDE) */}
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             <div className="bg-[#0f131c] border border-rose-900/60 p-4 rounded relative overflow-hidden">
               <span className="text-[10px] text-rose-400 font-mono uppercase tracking-widest block font-bold">DRAIN MENSUAL (ROJO)</span>
@@ -203,9 +197,7 @@ export default function TerminalAuthForm() {
             </div>
           </div>
 
-          {/* SECCIÓN VISUAL DE GRÁFICAS Y EVOLUCIÓN DE SANGRÍA (ROJO Y VERDE) */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            {/* Gráfica 1: Sangría Acumulada Anual en EBITDA (En Rojo) */}
             <div className="bg-[#0f131c] border border-[#2a3241] rounded p-5 space-y-4">
               <div className="flex justify-between items-center border-b border-[#2a3241] pb-3">
                 <div className="flex items-center space-x-2">
@@ -219,7 +211,6 @@ export default function TerminalAuthForm() {
                 </span>
               </div>
 
-              {/* Barras de Proyección Acumulada en Rojo */}
               <div className="space-y-2 pt-2">
                 {SANGRIAS_MENSUALES.map((item, idx) => {
                   const porcentaje = (item.acumulado / 1850) * 100
@@ -241,7 +232,6 @@ export default function TerminalAuthForm() {
               </div>
             </div>
 
-            {/* Gráfica 2: Restitución Positiva en Cuentas de Explotación (En Verde) */}
             <div className="bg-[#0f131c] border border-emerald-500/30 rounded p-5 space-y-4 bg-emerald-950/5">
               <div className="flex justify-between items-center border-b border-[#2a3241] pb-3">
                 <div className="flex items-center space-x-2">
@@ -299,7 +289,6 @@ export default function TerminalAuthForm() {
             </div>
           </div>
 
-          {/* APARTADO CHECKLIST REAL DE ASIMETRÍAS Y DESCRIPCIÓN TÉCNICA DEL CAMBIO DE RUMBO */}
           <div className="bg-[#0f131c] border border-[#2a3241] rounded p-6 space-y-6">
             <div className="flex items-center space-x-2 border-b border-[#2a3241] pb-3">
               <CheckSquare className="w-5 h-5 text-[#c5a059]" />
@@ -309,7 +298,6 @@ export default function TerminalAuthForm() {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
-              {/* Item 1 */}
               <div className="bg-[#141923] border border-rose-900/40 p-4 rounded space-y-2">
                 <div className="flex items-center space-x-2 text-rose-400 font-mono font-bold">
                   <XCircle className="w-4 h-4 shrink-0" />
@@ -323,7 +311,6 @@ export default function TerminalAuthForm() {
                 </div>
               </div>
 
-              {/* Item 2 */}
               <div className="bg-[#141923] border border-rose-900/40 p-4 rounded space-y-2">
                 <div className="flex items-center space-x-2 text-rose-400 font-mono font-bold">
                   <XCircle className="w-4 h-4 shrink-0" />
@@ -337,7 +324,6 @@ export default function TerminalAuthForm() {
                 </div>
               </div>
 
-              {/* Item 3 */}
               <div className="bg-[#141923] border border-rose-900/40 p-4 rounded space-y-2">
                 <div className="flex items-center space-x-2 text-rose-400 font-mono font-bold">
                   <XCircle className="w-4 h-4 shrink-0" />
@@ -351,11 +337,10 @@ export default function TerminalAuthForm() {
                 </div>
               </div>
 
-              {/* Item 4 */}
               <div className="bg-[#141923] border border-rose-900/40 p-4 rounded space-y-2">
                 <div className="flex items-center space-x-2 text-rose-400 font-mono font-bold">
                   <XCircle className="w-4 h-4 shrink-0" />
-                  <span>04. Volatilidad de Recargo de Combustible (*Fuel*)</span>
+                  <span>04. Volatilidad de Recargo de Combustible (Fuel)</span>
                 </div>
                 <p className="text-slate-300 leading-relaxed text-[11px]">
                   <strong>Punto de Fuga:</strong> Desfase temporal en la repercusión dinámica del coste de hidrocarburos sobre el flujo diario de rutas de larga distancia.
@@ -367,7 +352,6 @@ export default function TerminalAuthForm() {
             </div>
           </div>
 
-          {/* CONDICIONES LIQUIDATIVAS Y CRONÓMETRO */}
           <div className="bg-amber-950/10 border border-amber-500/30 rounded p-5 space-y-3 font-mono text-xs">
             <div className="flex items-center space-x-2 text-amber-400 font-bold uppercase">
               <Clock className="w-4 h-4" />
@@ -385,7 +369,6 @@ export default function TerminalAuthForm() {
         </div>
       )}
 
-      {/* VISTA AUTOR */}
       {status === "success_autor" && (
         <div className="p-8 space-y-4">
           <div className="bg-amber-950/20 border border-amber-500/30 rounded p-4 flex items-center justify-between">
@@ -400,7 +383,6 @@ export default function TerminalAuthForm() {
         </div>
       )}
 
-      {/* FOOTER */}
       <div className="bg-[#040507] border-t border-[#1e2430] px-6 py-3 text-[10px] font-mono text-slate-500 flex justify-between items-center">
         <span>LUXE VELA PRIVÉ STRATEGIC CONSULTING SL // NIF: B88823737</span>
         <span>HASH SHA-256: 25e5abdea0c1de19ed3ddbdd53c8268d800cb6...</span>
