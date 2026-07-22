@@ -44,10 +44,8 @@ interface FirmaData {
   contact: {
     title: string
     notice: string
-    dispatchLabel: string
-    dispatch: string
-    boardLabel: string
-    boardSupport: string
+    channelLabel: string
+    channelEmail: string
     fields: {
       entity: string
       contactPerson: string
@@ -104,10 +102,8 @@ const CONTENT: Record<Lang, FirmaData> = {
       title: '03 · TERMINAL DE DESPACHO & ACCESO RESTRINGIDO',
       notice:
         'Atención pericial exclusiva para miembros del Consejo de Administración, Direcciones Financieras (CFO), Fondos de Inversión y Presidencia.',
-      dispatchLabel: 'DESPACHO PERICIAL',
-      dispatch: 'despacho@velaluxeprive.com',
-      boardLabel: 'SOPORTE CONSEJO C-SUITE',
-      boardSupport: 'c-suite@velaluxeprive.com',
+      channelLabel: 'DESPACHO PERICIAL + SOPORTE C-SUITE',
+      channelEmail: 'prive@velaluxeprive.com',
       fields: {
         entity: 'Denominación Social / CIF-NIF',
         contactPerson: 'Representante C-Suite / Cargo',
@@ -164,10 +160,8 @@ const CONTENT: Record<Lang, FirmaData> = {
       title: '03 · DISPATCH TERMINAL & RESTRICTED ACCESS',
       notice:
         'Expert attention exclusive to members of the Board of Directors, Chief Financial Officers (CFO), Investment Funds and the Chairmanship.',
-      dispatchLabel: 'EXPERT DISPATCH',
-      dispatch: 'despacho@velaluxeprive.com',
-      boardLabel: 'C-SUITE BOARD SUPPORT',
-      boardSupport: 'c-suite@velaluxeprive.com',
+      channelLabel: 'EXPERT DISPATCH + C-SUITE BOARD SUPPORT',
+      channelEmail: 'prive@velaluxeprive.com',
       fields: {
         entity: 'Legal Name / Company Tax ID',
         contactPerson: 'C-Suite Representative / Position',
@@ -224,10 +218,8 @@ const CONTENT: Record<Lang, FirmaData> = {
       title: '03 · TERMINAL DE CABINET & ACCÈS RESTREINT',
       notice:
         "Attention d'expertise exclusive aux membres du Conseil d'Administration, aux Directions Financières (CFO), aux Fonds d'Investissement et à la Présidence.",
-      dispatchLabel: "CABINET D'EXPERTISE",
-      dispatch: 'despacho@velaluxeprive.com',
-      boardLabel: 'SUPPORT CONSEIL C-SUITE',
-      boardSupport: 'c-suite@velaluxeprive.com',
+      channelLabel: "CABINET D'EXPERTISE + SUPPORT CONSEIL C-SUITE",
+      channelEmail: 'prive@velaluxeprive.com',
       fields: {
         entity: 'Dénomination Sociale / Numéro Fiscal',
         contactPerson: 'Représentant C-Suite / Fonction',
@@ -284,10 +276,8 @@ const CONTENT: Record<Lang, FirmaData> = {
       title: '03 · KANZLEI-TERMINAL & EINGESCHRÄNKTER ZUGANG',
       notice:
         'Gutachterliche Betreuung ausschließlich für Mitglieder des Verwaltungsrats, Finanzvorstände (CFO), Investmentfonds und die Präsidentschaft.',
-      dispatchLabel: 'GUTACHTERKANZLEI',
-      dispatch: 'despacho@velaluxeprive.com',
-      boardLabel: 'C-SUITE VORSTANDSSUPPORT',
-      boardSupport: 'c-suite@velaluxeprive.com',
+      channelLabel: 'GUTACHTERKANZLEI + C-SUITE VORSTANDSSUPPORT',
+      channelEmail: 'prive@velaluxeprive.com',
       fields: {
         entity: 'Firmenname / Steuernummer',
         contactPerson: 'C-Suite-Vertreter / Position',
@@ -423,26 +413,6 @@ export function FirmaContactoSection({ lang }: { lang: Lang }) {
           {data.contact.notice}
         </p>
 
-        {/* Canales de despacho */}
-        <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-px border bg-white/[0.04]" style={{ borderColor: `${GOLD}22` }}>
-          <div className="flex flex-col gap-1.5 bg-[#141414] px-6 py-5">
-            <span className="font-mono text-[10px] uppercase tracking-[0.2em]" style={{ color: EMERALD }}>
-              {data.contact.dispatchLabel}
-            </span>
-            <a href={`mailto:${data.contact.dispatch}`} className="font-mono text-[13px] transition-opacity hover:opacity-80" style={{ color: GOLD }}>
-              {data.contact.dispatch}
-            </a>
-          </div>
-          <div className="flex flex-col gap-1.5 bg-[#141414] px-6 py-5">
-            <span className="font-mono text-[10px] uppercase tracking-[0.2em]" style={{ color: EMERALD }}>
-              {data.contact.boardLabel}
-            </span>
-            <a href={`mailto:${data.contact.boardSupport}`} className="font-mono text-[13px] transition-opacity hover:opacity-80" style={{ color: GOLD }}>
-              {data.contact.boardSupport}
-            </a>
-          </div>
-        </div>
-
         {/* Formulario cifrado */}
         {submitted ? (
           <div
@@ -532,6 +502,23 @@ export function FirmaContactoSection({ lang }: { lang: Lang }) {
           </span>
           <span className="sm:text-right text-gray-500">{data.footer.copyright}</span>
         </div>
+      </div>
+
+      {/* Canal unificado de despacho */}
+      <div
+        className="mt-10 flex flex-col items-center gap-2 border bg-white/[0.04] px-6 py-7 text-center"
+        style={{ borderColor: `${GOLD}22` }}
+      >
+        <span className="font-mono text-[10px] uppercase tracking-[0.24em]" style={{ color: EMERALD }}>
+          {data.contact.channelLabel}
+        </span>
+        <a
+          href={`mailto:${data.contact.channelEmail}`}
+          className="font-mono text-[15px] tracking-[0.06em] transition-opacity hover:opacity-80"
+          style={{ color: GOLD }}
+        >
+          {data.contact.channelEmail}
+        </a>
       </div>
     </div>
   )
