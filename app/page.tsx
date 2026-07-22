@@ -39,7 +39,7 @@ const SANGRIAS_MENSUALES = [
   { mes: "Dic", acumulado: 1850.00 },
 ]
 
-export default function Home() {
+export default function RootPage() {
   const [tokenInput, setTokenInput] = useState("")
   const [showPassword, setShowPassword] = useState(false)
   const [status, setStatus] = useState<"idle" | "loading" | "success_cliente" | "success_autor" | "error">("idle")
