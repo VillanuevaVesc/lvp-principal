@@ -7,7 +7,7 @@ import { FlagIcon } from '@/components/flag-icons'
 import { ServiciosSection } from '@/components/servicios-section'
 import { MetodologiaSection } from '@/components/metodologia-section'
 import { FirmaContactoSection } from '@/components/firma-contacto-section'
-import { grantOmegaAccess } from '@/lib/omega-session'
+import { grantOmegaAccess, setOmegaLang } from '@/lib/omega-session'
 
 // Código de enlace maestro que otorga acceso directo al dashboard analítico de la firma.
 const DASHBOARD_ACCESS_CODE = 'LVP-OMEGA-1307-PRMF-926B'
@@ -1080,6 +1080,7 @@ export default function App() {
     if (otpInput.trim().toUpperCase() === DASHBOARD_ACCESS_CODE) {
       setErrorMessage('')
       grantOmegaAccess()
+      setOmegaLang(lang)
       router.push('/dashboard')
       return
     }
