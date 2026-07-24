@@ -16,7 +16,47 @@ import {
   Percent,
   Zap,
 } from 'lucide-react'
-import { isOmegaGranted, revokeOmegaAccess } from '@/lib/omega-session'
+import {
+  isOmegaGranted,
+  revokeOmegaAccess,
+  getOmegaLang,
+  type OmegaLang,
+} from '@/lib/omega-session'
+
+/* ---------- LOCALIZACIÓN C-SUITE · BANNER / SUBTÍTULO / SALIDA ---------- */
+type SessionChrome = {
+  bannerLead: string
+  bannerTail: string
+  brandSub: string
+  closeBtn: string
+}
+
+const SESSION_CHROME: Record<OmegaLang, SessionChrome> = {
+  es: {
+    bannerLead: 'EXPEDIENTE CONFIDENCIAL C-SUITE',
+    bannerTail: 'SESIÓN DE AUDITORÍA REGISTRADA Y TRAZABLE EN TIEMPO REAL',
+    brandSub: 'PROTOCOLO C-SUITE · ENCLAVE CIFRADO',
+    closeBtn: 'Finalizar sesión',
+  },
+  en: {
+    bannerLead: 'C-SUITE CONFIDENTIAL DOSSIER',
+    bannerTail: 'REAL-TIME AUDITED & TRACEABLE SESSION',
+    brandSub: 'C-SUITE PROTOCOL · ENCRYPTED ENCLAVE',
+    closeBtn: 'End session',
+  },
+  fr: {
+    bannerLead: 'DOSSIER CONFIDENTIEL C-SUITE',
+    bannerTail: 'SESSION AUDITÉE ET TRAÇABLE EN TEMPS RÉEL',
+    brandSub: 'PROTOCOLE C-SUITE · ENCLAVE CHIFFRÉE',
+    closeBtn: 'Fin de session',
+  },
+  de: {
+    bannerLead: 'VERTRAULICHES C-SUITE-GUTACHTEN',
+    bannerTail: 'AUDITIERTE UND TRACEBARE SITZUNG IN ECHTZEIT',
+    brandSub: 'C-SUITE PROTOKOLL · VERSCHLÜSSELTE ENKLAVE',
+    closeBtn: 'Sitzung beenden',
+  },
+}
 
 /* ---------- PALETA PERICIAL FORENSE C-SUITE ---------- */
 const OBSIDIAN = '#0A0A0B'
@@ -108,6 +148,9 @@ const SUCCESS_SCALE = [
 export default function DashboardPage() {
   const router = useRouter()
   const [authorized, setAuthorized] = useState(false)
+  // Idioma activo heredado del selector C-Suite en el momento del acceso.
+  const [lang, setLang] = useState<OmegaLang>('es')
+  const chrome = SESSION_CHROME[lang]
 
   useEffect(() => {
     // El acceso solo es válido si la Solapa 4 concedió el permiso en esta sesión
@@ -117,6 +160,7 @@ export default function DashboardPage() {
       return
     }
     setAuthorized(true)
+    setLang(getOmegaLang())
 
     // Auto-bloqueo al salir: recarga o cierre de pestaña revoca el token.
     const revoke = () => revokeOmegaAccess()
@@ -155,9 +199,9 @@ export default function DashboardPage() {
       >
         <ShieldAlert className="h-3.5 w-3.5 shrink-0 animate-pulse" style={{ color: RED }} aria-hidden="true" />
         <p className="font-mono text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.18em]">
-          <span style={{ color: RED }}>SESIÓN PERICIAL ÚNICA Y CONFIDENCIAL</span>
+          <span style={{ color: RED }}>{chrome.bannerLead}</span>
           <span className="text-gray-500"> // </span>
-          <span style={{ color: GOLD }}>ESTE EXPEDIENTE SE AUTO-BLOQUEARÁ AL SALIR</span>
+          <span style={{ color: GOLD }}>{chrome.bannerTail}</span>
         </p>
       </div>
 
@@ -170,7 +214,7 @@ export default function DashboardPage() {
           <div>
             <p className="text-[13px] font-light tracking-[0.2em] leading-none">LUXE&nbsp;VELA&nbsp;PRIVÉ</p>
             <p className="text-[9px] font-mono uppercase tracking-[0.28em] text-gray-500 mt-1">
-              One-Time View Protocol · Enclave Cifrado
+              {chrome.brandSub}
             </p>
           </div>
         </div>
@@ -180,7 +224,7 @@ export default function DashboardPage() {
           className="flex items-center gap-2 text-[10px] font-mono uppercase tracking-wider px-3 py-2 rounded border border-white/10 hover:border-white/30 transition-colors text-gray-300"
         >
           <LogOut className="h-3.5 w-3.5" aria-hidden="true" />
-          Cerrar y bloquear
+          {chrome.closeBtn}
         </button>
       </header>
 
