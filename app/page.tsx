@@ -543,9 +543,9 @@ const translations: Record<Lang, Dict> = {
     terminal: {
       tag: '[ ASYMMETRY AUTHENTICATION TERMINAL ]',
       title: 'Methodology & Forensic Intervention',
-      noticeHead: '■ DIRECT COUNTER-CONTROL ON EBITDA (COURTESY SAMPLE)',
+      noticeHead: '■ REAL-TIME FORENSIC EVALUATION // C-SUITE RESTRICTED ACCESS',
       noticeBody:
-        'The Board of Directors has a single real, free and unconditional attempt to test the infallibility of our exogenous analytical environment LVP-OMEGA v.3.1 before initiating any formal procedure.',
+        'This terminal grants exclusive access to the Board of Directors to trigger the instant, exogenous validation of the assigned forensic dossier via the LVP-OMEGA v.3.2 analytical engine.',
       p1Head: '1. Secure Access',
       p1Body: 'Enter your unique one-time access key (OTP) shown in your formal communication.',
       otpPlaceholder: 'ENTER PRIVATE ACCESS OTP',
@@ -749,9 +749,9 @@ const translations: Record<Lang, Dict> = {
     terminal: {
       tag: '[ TERMINAL D’AUTHENTIFICATION DES ASYMÉTRIES ]',
       title: 'Méthodologie et Intervention Expert',
-      noticeHead: '■ CONTRE-CONTRÔLE DIRECT SUR L’EBITDA (ÉCHANTILLON DE COURTOISIE)',
+      noticeHead: '■ ÉVALUATION FORENSIQUE EN TEMPS RÉEL // ACCÈS RESTREINT C-SUITE',
       noticeBody:
-        'Le Conseil d’Administration dispose d’une unique tentative réelle, gratuite et libre pour éprouver l’infaillibilité de notre environnement analytique exogène LVP-OMEGA v.3.1 avant d’engager toute procédure formelle.',
+        'Ce terminal accorde un accès exclusif au Conseil d’Administration pour déclencher la validation exogène et instantanée du dossier d’expertise assigné via le moteur analytique LVP-OMEGA v.3.2.',
       p1Head: '1. Accès Sécurisé',
       p1Body: 'Saisissez votre clé d’accès unique à usage unique (OTP) figurant dans votre communication formelle.',
       otpPlaceholder: 'SAISISSEZ L’OTP D’ACCÈS PRIVÉ',
@@ -955,9 +955,9 @@ const translations: Record<Lang, Dict> = {
     terminal: {
       tag: '[ ASYMMETRIE-AUTHENTIFIZIERUNGSTERMINAL ]',
       title: 'Methodik & Gutachterliche Intervention',
-      noticeHead: '■ DIREKTE GEGENKONTROLLE DES EBITDA (KULANZ-MUSTER)',
+      noticeHead: '■ FORENSISCHE BEWERTUNG IN ECHTZEIT // C-SUITE BESCHRÄNKTER ZUGRIFF',
       noticeBody:
-        'Der Verwaltungsrat verfügt über einen einzigen echten, kostenlosen und freien Versuch, um die Unfehlbarkeit unserer exogenen analytischen Umgebung LVP-OMEGA v.3.1 zu prüfen, bevor ein formelles Verfahren eingeleitet wird.',
+        'Dieses Terminal gewährt dem Vorstand exklusiven Zugriff zur sofortigen, exogenen Validierung des zugewiesenen Gutachtens über die Analyseumgebung LVP-OMEGA v.3.2.',
       p1Head: '1. Sicherer Zugang',
       p1Body: 'Geben Sie Ihren einmaligen Zugangsschlüssel (OTP) ein, der in Ihrer formellen Kommunikation angegeben ist.',
       otpPlaceholder: 'PRIVATEN ZUGANGS-OTP EINGEBEN',
