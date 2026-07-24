@@ -337,9 +337,9 @@ const translations: Record<Lang, Dict> = {
     terminal: {
       tag: '[ TERMINAL DE AUTENTICACIÓN DE ASIMETRÍAS ]',
       title: 'Metodología e Intervención Pericial',
-      noticeHead: '■ CONTRACONTROL DIRECTO AL EBITDA (MUESTRA DE CORTESÍA)',
+      noticeHead: '■ EVALUACIÓN PERICIAL EN TIEMPO REAL // ACCESO RESTRINGIDO C-SUITE',
       noticeBody:
-        'El Consejo de Administración dispone de un único intento real, gratuito y libre para contrastar la infalibilidad de nuestro entorno analítico exógeno LVP-OMEGA v.3.1 antes de iniciar cualquier trámite formal.',
+        'La presente terminal otorga acceso exclusivo al Consejo de Administración para desencadenar la validación exógena e instantánea del expediente pericial asignado mediante el entorno analítico LVP-OMEGA v.3.2.',
       p1Head: '1. Acceso Seguro',
       p1Body: 'Introduzca su clave de acceso única de un solo uso (OTP) reflejada en su comunicación formal.',
       otpPlaceholder: 'INTRODUZCA OTP DE ACCESO PRIVADO',
