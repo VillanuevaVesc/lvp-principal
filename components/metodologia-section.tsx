@@ -226,28 +226,28 @@ export function MetodologiaSection({ lang }: { lang: Lang }) {
   const data = CONTENT[lang] ?? CONTENT.es
 
   return (
-    <div className="max-w-6xl mx-auto animate-fadeIn">
+    <div className="max-w-7xl mx-auto animate-fadeIn">
       {/* Cabecera de la sección */}
       <span
-        className="text-[11px] font-mono uppercase tracking-[0.3em] inline-block mb-5"
+        className="text-xs font-mono uppercase tracking-[0.3em] inline-block mb-6"
         style={{ color: EMERALD }}
       >
         {data.badge}
       </span>
-      <h1 className="text-3xl sm:text-4xl lg:text-5xl font-light tracking-tight leading-[1.15] text-balance max-w-4xl text-white">
+      <h1 className="text-4xl sm:text-5xl lg:text-6xl font-light tracking-tight leading-[1.1] text-balance max-w-5xl text-white">
         {data.mainTitle}
       </h1>
-      <p className="mt-6 text-base sm:text-lg text-gray-400 font-light leading-relaxed max-w-3xl text-pretty">
+      <p className="mt-7 text-lg sm:text-xl text-gray-400 font-light leading-relaxed max-w-4xl text-pretty">
         {data.subtitle}
       </p>
 
       {/* Bloque de autoridad institucional QUIÉNES SOMOS */}
       <section
-        className="mt-14 relative bg-white/[0.03] px-6 py-8 sm:px-9 sm:py-10"
+        className="mt-16 relative bg-white/[0.03] px-7 py-9 sm:px-10 sm:py-12"
         style={{ border: `1px solid ${GOLD}33`, borderLeft: `2px solid ${GOLD}` }}
         aria-labelledby="about-us-title"
       >
-        <div className="flex items-center gap-3 mb-5">
+        <div className="flex items-center gap-3 mb-6">
           <span
             aria-hidden="true"
             className="h-1.5 w-1.5 rotate-45"
@@ -255,31 +255,31 @@ export function MetodologiaSection({ lang }: { lang: Lang }) {
           />
           <h2
             id="about-us-title"
-            className="font-mono text-[12px] sm:text-[13px] uppercase tracking-[0.22em] font-medium"
+            className="font-mono text-[13px] sm:text-sm uppercase tracking-[0.22em] font-medium"
             style={{ color: GOLD }}
           >
             {data.aboutUs.title}
           </h2>
         </div>
-        <p className="text-[14px] sm:text-[15px] leading-relaxed font-light text-gray-300 max-w-4xl text-pretty">
+        <p className="text-base sm:text-lg leading-relaxed font-light text-gray-300 max-w-4xl text-pretty">
           {data.aboutUs.description}
         </p>
       </section>
 
       {/* Parrilla metodológica de 4 fases */}
       <div
-        className="mt-14 grid grid-cols-1 md:grid-cols-2 gap-px border bg-white/[0.04]"
+        className="mt-16 grid grid-cols-1 md:grid-cols-2 gap-px border bg-white/[0.04]"
         style={{ borderColor: `${GOLD}22` }}
       >
         {data.blocks.map((b) => (
           <article
             key={b.code}
-            className="group relative flex flex-col gap-3 bg-[#141414] px-6 py-7 sm:px-8 sm:py-9 transition-colors duration-300 hover:bg-[#181613]"
+            className="group relative flex flex-col gap-4 bg-[#141414] px-8 py-9 sm:px-10 sm:py-11 transition-colors duration-300 hover:bg-[#181613]"
           >
             {/* Índice de fase */}
             <div className="flex items-center gap-3">
               <span
-                className="font-mono text-2xl font-light leading-none tabular-nums"
+                className="font-mono text-4xl sm:text-5xl font-light leading-none tabular-nums"
                 style={{ color: GOLD }}
               >
                 {b.code}
@@ -290,10 +290,10 @@ export function MetodologiaSection({ lang }: { lang: Lang }) {
                 style={{ backgroundColor: `${EMERALD}55` }}
               />
             </div>
-            <h3 className="font-mono text-[13px] sm:text-sm font-semibold uppercase tracking-[0.14em] leading-snug text-white text-pretty">
+            <h3 className="font-mono text-sm sm:text-base font-semibold uppercase tracking-[0.14em] leading-snug text-white text-pretty">
               {b.title}
             </h3>
-            <p className="text-[13px] leading-relaxed font-light text-gray-400 text-pretty">
+            <p className="text-base leading-relaxed font-light text-gray-400 text-pretty">
               {b.description}
             </p>
           </article>
@@ -319,11 +319,11 @@ export function MetodologiaSection({ lang }: { lang: Lang }) {
           </span>
         </div>
 
-        <p className="text-[13px] leading-relaxed font-light text-gray-400 max-w-3xl text-pretty">
+        <p className="text-base leading-relaxed font-light text-gray-400 max-w-4xl text-pretty">
           {data.footer.universalClause}
         </p>
 
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2 font-mono text-[10px] tracking-[0.16em]">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2 font-mono text-[11px] tracking-[0.16em]">
           <span style={{ color: EMERALD }}>{data.footer.iae}</span>
           <span className="sm:text-center" style={{ color: EMERALD }}>
             {data.footer.cnae}

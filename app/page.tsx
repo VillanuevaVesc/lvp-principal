@@ -353,7 +353,7 @@ const translations: Record<Lang, Dict> = {
       fileReady: 'Estructura volátil lista en memoria periférica',
       shredBtn: 'Triturar Estados Financieros',
       processing: 'Ejecutando cribado forense LVP-OMEGA v.3.1…',
-      processingSub: 'Procesando flujos informativos exógenos y registros públicos oficiales',
+      processingSub: 'Procesando flujos informativos exógenos y registros p��blicos oficiales',
       reportHead: 'Auditoría Forense de Asimetría de Capital',
       autoDestroy: 'DESTRUCCIÓN AUTOMÁTICA ACTIVA',
       diagnosis:
@@ -1408,54 +1408,54 @@ function AsymmetryTerminal({
   }, [processing, t.procSteps.length])
 
   return (
-    <div className="max-w-2xl mx-auto animate-fadeIn">
-      <div className="text-center mb-10">
-        <span className="text-[10px] font-mono uppercase tracking-[0.3em]" style={{ color: GOLD }}>
+    <div className="max-w-3xl mx-auto animate-fadeIn">
+      <div className="text-center mb-12">
+        <span className="text-xs font-mono uppercase tracking-[0.3em]" style={{ color: GOLD }}>
           {t.contextEyebrow}
         </span>
-          <h1 className="text-xl sm:text-2xl font-light tracking-tight mt-3">{t.title}</h1>
-        <p className="mt-3 text-xs text-gray-500 font-light leading-relaxed max-w-xl mx-auto text-pretty">
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-light tracking-tight leading-[1.15] text-balance mt-5">{t.title}</h1>
+        <p className="mt-5 text-base sm:text-lg text-gray-500 font-light leading-relaxed max-w-2xl mx-auto text-pretty">
           {t.contextSubtitle}
         </p>
       </div>
 
       {/* Aviso de cortesía — texto flotante con acento fino, sin caja pesada */}
       <div
-        className="mb-10 pl-4 text-xs leading-relaxed"
-        style={{ borderLeft: '1px solid rgba(220,38,38,0.5)', color: '#f4a3a3' }}
+        className="mb-12 pl-5 text-sm sm:text-base leading-relaxed"
+        style={{ borderLeft: '2px solid rgba(220,38,38,0.5)', color: '#f4a3a3' }}
       >
-        <span className="font-bold block mb-1 font-mono">{t.noticeHead}</span>
+        <span className="font-bold block mb-2 font-mono text-xs sm:text-sm tracking-wide">{t.noticeHead}</span>
         {t.noticeBody}
       </div>
 
       {/* FASE 1 · OTP */}
       {!isOtpVerified && (
-        <form onSubmit={onVerify} className="space-y-5 font-mono">
-          <div className="pb-2" style={{ borderBottom: `1px solid ${GOLD}22` }}>
-            <h3 className="text-xs font-bold uppercase tracking-wider" style={{ color: GOLD }}>
+        <form onSubmit={onVerify} className="space-y-6 font-mono">
+          <div className="pb-3" style={{ borderBottom: `1px solid ${GOLD}22` }}>
+            <h3 className="text-sm sm:text-base font-bold uppercase tracking-wider" style={{ color: GOLD }}>
               {t.p1Head}
             </h3>
-            <p className="text-[11px] text-gray-400 font-sans mt-1">{t.p1Body}</p>
+            <p className="text-sm text-gray-400 font-sans mt-1.5 leading-relaxed">{t.p1Body}</p>
           </div>
-          <div className="flex flex-col sm:flex-row gap-3">
+          <div className="flex flex-col sm:flex-row gap-4">
             <input
               type="text"
               value={otpInput}
               onChange={(e) => setOtpInput(e.target.value)}
               placeholder={t.otpPlaceholder}
-              className="flex-1 px-0 py-2.5 text-xs tracking-[0.15em] uppercase bg-transparent focus:outline-none placeholder-gray-700"
-              style={{ borderBottom: `1px solid ${GOLD}44`, color: '#fff' }}
+              className="flex-1 h-14 px-4 text-lg sm:text-xl font-mono tracking-[0.2em] uppercase bg-black/40 rounded focus:outline-none placeholder-gray-700 transition-colors focus:bg-black/60"
+              style={{ border: `1px solid ${GOLD}44`, color: '#fff' }}
             />
             <button
               type="submit"
-              className="font-sans font-bold text-xs px-5 py-2.5 rounded uppercase tracking-wider shrink-0 transition-opacity hover:opacity-90"
+              className="font-sans font-bold text-base h-14 px-8 rounded uppercase tracking-wider shrink-0 transition-opacity hover:opacity-90"
               style={{ backgroundColor: GOLD, color: '#000' }}
             >
               {t.authBtn}
             </button>
           </div>
           {errorMessage && (
-            <p className="text-[10px] font-bold animate-pulse" style={{ color: '#f87171' }}>
+            <p className="text-xs font-bold animate-pulse" style={{ color: '#f87171' }}>
               ▲ {errorMessage}
             </p>
           )}
@@ -1464,15 +1464,15 @@ function AsymmetryTerminal({
 
       {/* FASE 2 · CARGA VOLÁTIL */}
       {isOtpVerified && !processing && !reportView && (
-        <div className="space-y-5 font-mono animate-fadeIn">
-          <div className="pb-2 flex justify-between items-center gap-3" style={{ borderBottom: `1px solid ${GOLD}22` }}>
+        <div className="space-y-6 font-mono animate-fadeIn">
+          <div className="pb-3 flex justify-between items-center gap-3" style={{ borderBottom: `1px solid ${GOLD}22` }}>
             <div>
-              <h3 className="text-xs font-bold uppercase tracking-wider" style={{ color: '#34d399' }}>
+              <h3 className="text-sm sm:text-base font-bold uppercase tracking-wider" style={{ color: '#34d399' }}>
                 {t.p2Head}
               </h3>
-              <p className="text-[11px] text-gray-400 font-sans mt-1">{t.p2Body}</p>
+              <p className="text-sm text-gray-400 font-sans mt-1.5 leading-relaxed">{t.p2Body}</p>
             </div>
-            <span className="text-[9px] shrink-0" style={{ color: '#34d399' }}>
+            <span className="text-[10px] shrink-0" style={{ color: '#34d399' }}>
               {t.enclaveActive}
             </span>
           </div>
@@ -1527,7 +1527,7 @@ function AsymmetryTerminal({
               onDragOver={legalAccepted ? onDragOver : (e) => e.preventDefault()}
               onDragLeave={onDragLeave}
               className={
-                'w-full py-10 text-center transition-colors outline-none ' +
+                'w-full py-14 text-center transition-colors outline-none ' +
                 (legalAccepted ? 'cursor-pointer group' : 'cursor-not-allowed opacity-40')
               }
               style={{
@@ -1535,24 +1535,24 @@ function AsymmetryTerminal({
                 backgroundColor: dragOver && legalAccepted ? 'rgba(197,168,128,0.06)' : 'transparent',
               }}
             >
-              <span className="text-xs text-gray-400 group-hover:text-white block">{t.attachBtn}</span>
-              <span className="text-[10px] text-gray-600 block mt-1 font-sans">{t.attachSub}</span>
-              <span className="text-[9px] text-gray-700 block mt-2 font-mono tracking-wider">
+              <span className="text-sm sm:text-base text-gray-400 group-hover:text-white block">{t.attachBtn}</span>
+              <span className="text-xs text-gray-600 block mt-1.5 font-sans">{t.attachSub}</span>
+              <span className="text-[10px] text-gray-700 block mt-2.5 font-mono tracking-wider">
                 .CSV · .PDF
               </span>
             </div>
           ) : (
-            <div className="py-3 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div className="py-4 flex flex-col sm:flex-row items-center justify-between gap-4">
               <div className="flex items-center gap-3">
                 <span style={{ color: '#34d399' }}>▣</span>
                 <div className="flex flex-col">
-                  <span className="text-xs text-white font-medium">{fileSelected}</span>
-                  <span className="text-[9px] text-gray-500 uppercase">{t.fileReady}</span>
+                  <span className="text-sm sm:text-base text-white font-medium">{fileSelected}</span>
+                  <span className="text-[10px] text-gray-500 uppercase">{t.fileReady}</span>
                 </div>
               </div>
               <button
                 onClick={onProcess}
-                className="font-sans font-bold text-xs py-2.5 px-5 rounded uppercase tracking-wider shrink-0 transition-opacity hover:opacity-90"
+                className="font-sans font-bold text-base h-14 px-8 rounded uppercase tracking-wider shrink-0 transition-opacity hover:opacity-90"
                 style={{ backgroundColor: GOLD, color: '#000' }}
               >
                 {t.shredBtn}
