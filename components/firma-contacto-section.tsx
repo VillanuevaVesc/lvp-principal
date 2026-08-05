@@ -301,7 +301,7 @@ const CONTENT: Record<Lang, FirmaData> = {
 }
 
 const FIELD_CLASS =
-  'w-full bg-black/40 text-white placeholder:text-gray-600 font-mono text-[13px] px-4 py-3 outline-none transition-colors focus:bg-black/60'
+  'w-full bg-black/40 text-white placeholder:text-gray-600 font-mono text-base px-5 py-4 outline-none transition-colors focus:bg-black/60'
 
 export function FirmaContactoSection({ lang }: { lang: Lang }) {
   const data = CONTENT[lang] ?? CONTENT.es
@@ -313,18 +313,18 @@ export function FirmaContactoSection({ lang }: { lang: Lang }) {
   }
 
   return (
-    <div className="max-w-6xl mx-auto animate-fadeIn">
+    <div className="max-w-7xl mx-auto animate-fadeIn">
       {/* Cabecera de la sección */}
       <span
-        className="text-[11px] font-mono uppercase tracking-[0.3em] inline-block mb-5"
+        className="text-xs font-mono uppercase tracking-[0.3em] inline-block mb-6"
         style={{ color: EMERALD }}
       >
         {data.badge}
       </span>
-      <h1 className="text-3xl sm:text-4xl lg:text-5xl font-light tracking-tight leading-[1.15] text-balance max-w-4xl text-white">
+      <h1 className="text-4xl sm:text-5xl lg:text-6xl font-light tracking-tight leading-[1.1] text-balance max-w-5xl text-white">
         {data.mainTitle}
       </h1>
-      <p className="mt-6 text-base sm:text-lg text-gray-400 font-light leading-relaxed max-w-3xl text-pretty">
+      <p className="mt-7 text-lg sm:text-xl text-gray-400 font-light leading-relaxed max-w-4xl text-pretty">
         {data.subtitle}
       </p>
 
@@ -344,7 +344,7 @@ export function FirmaContactoSection({ lang }: { lang: Lang }) {
             {data.governance.title}
           </h2>
         </div>
-        <p className="text-[14px] sm:text-[15px] leading-relaxed font-light text-gray-300 max-w-4xl text-pretty">
+        <p className="text-base sm:text-lg leading-relaxed font-light text-gray-300 max-w-4xl text-pretty">
           {data.governance.description}
         </p>
 
@@ -380,7 +380,7 @@ export function FirmaContactoSection({ lang }: { lang: Lang }) {
             {data.legal.title}
           </h2>
         </div>
-        <p className="text-[14px] sm:text-[15px] leading-relaxed font-light text-gray-300 max-w-4xl text-pretty">
+        <p className="text-base sm:text-lg leading-relaxed font-light text-gray-300 max-w-4xl text-pretty">
           {data.legal.description}
         </p>
         <ul className="mt-6 flex flex-col gap-3">
@@ -409,7 +409,7 @@ export function FirmaContactoSection({ lang }: { lang: Lang }) {
             {data.contact.title}
           </h2>
         </div>
-        <p className="text-[14px] sm:text-[15px] leading-relaxed font-light text-gray-300 max-w-4xl text-pretty">
+        <p className="text-base sm:text-lg leading-relaxed font-light text-gray-300 max-w-4xl text-pretty">
           {data.contact.notice}
         </p>
 

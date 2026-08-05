@@ -442,32 +442,32 @@ export function ServiciosSection({ lang }: { lang: Lang }) {
   const data = CONTENT[lang] ?? CONTENT.es
 
   return (
-    <div className="max-w-6xl mx-auto animate-fadeIn">
+    <div className="max-w-7xl mx-auto animate-fadeIn">
       {/* Cabecera de la sección */}
       <span
-        className="text-[11px] font-mono uppercase tracking-[0.3em] inline-block mb-5"
+        className="text-xs font-mono uppercase tracking-[0.3em] inline-block mb-6"
         style={{ color: EMERALD }}
       >
         {data.badge}
       </span>
-      <h1 className="text-3xl sm:text-4xl lg:text-5xl font-light tracking-tight leading-[1.15] text-balance max-w-4xl text-white">
+      <h1 className="text-4xl sm:text-5xl lg:text-6xl font-light tracking-tight leading-[1.1] text-balance max-w-5xl text-white">
         {data.mainTitle}
       </h1>
-      <p className="mt-6 text-base sm:text-lg text-gray-400 font-light leading-relaxed max-w-3xl text-pretty">
+      <p className="mt-7 text-lg sm:text-xl text-gray-400 font-light leading-relaxed max-w-4xl text-pretty">
         {data.subtitle}
       </p>
 
       {/* Rejilla de los 12 Vectores Operativos */}
-      <div className="mt-14 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-px border bg-white/[0.04]" style={{ borderColor: `${GOLD}22` }}>
+      <div className="mt-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-px border bg-white/[0.04]" style={{ borderColor: `${GOLD}22` }}>
         {data.vectors.map((v) => (
           <article
             key={v.code}
-            className="group relative flex flex-col gap-3 bg-[#141414] px-6 py-7 transition-colors duration-300 hover:bg-[#181613]"
+            className="group relative flex flex-col gap-4 bg-[#141414] px-8 py-9 transition-colors duration-300 hover:bg-[#181613]"
           >
             {/* Índice + categoría */}
             <div className="flex items-center gap-3">
               <span
-                className="font-mono text-2xl font-light leading-none tabular-nums"
+                className="font-mono text-4xl sm:text-5xl font-light leading-none tabular-nums"
                 style={{ color: GOLD }}
               >
                 {v.code}
@@ -479,15 +479,15 @@ export function ServiciosSection({ lang }: { lang: Lang }) {
               />
             </div>
             <span
-              className="font-mono text-[10px] uppercase tracking-[0.22em] leading-relaxed"
+              className="font-mono text-[11px] uppercase tracking-[0.22em] leading-relaxed"
               style={{ color: EMERALD }}
             >
               {v.category}
             </span>
-            <h2 className="text-[15px] font-semibold leading-snug tracking-wide text-white text-pretty">
+            <h2 className="text-xl font-semibold leading-snug tracking-wide text-white text-pretty">
               {v.title}
             </h2>
-            <p className="text-[13px] leading-relaxed font-light text-gray-400 text-pretty">
+            <p className="text-base leading-relaxed font-light text-gray-400 text-pretty">
               {v.description}
             </p>
           </article>
@@ -513,11 +513,11 @@ export function ServiciosSection({ lang }: { lang: Lang }) {
           </span>
         </div>
 
-        <p className="text-[13px] leading-relaxed font-light text-gray-400 max-w-3xl text-pretty">
+        <p className="text-base leading-relaxed font-light text-gray-400 max-w-4xl text-pretty">
           {data.footer.universalClause}
         </p>
 
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2 font-mono text-[10px] tracking-[0.16em]">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2 font-mono text-[11px] tracking-[0.16em]">
           <span style={{ color: `${EMERALD}` }}>{data.footer.iae}</span>
           <span className="sm:text-center" style={{ color: EMERALD }}>
             {data.footer.cnae}
