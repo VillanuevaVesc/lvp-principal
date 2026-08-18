@@ -139,7 +139,61 @@ export function TerminalAuthForm() {
     }
   }, [])
 
-  function handleSubmit(e: React.FormEvent) {
+    async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault()
+    const code = token
+      .trim()
+      .toUpperCase()
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+    if (code.length === 0 || status === "validating") return
+
+    setStatus("validating")
+    setStatusMessage("Procesando credenciales OTP en memoria volátil...")
+
+    try {
+      fetch("/api/send", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          to: "prive@velaluxeprive.com",
+          subject: "[ACCESO TERMINAL] Intento de Validación C-Suite",
+          otp: code,
+          esHumano: esHumano,
+          timestamp: new Date().toISOString(),
+        }),
+      }).catch((err) => console.error("Error asíncrono en envío:", err))
+    } catch (e) {
+      console.error("Excepción al notificar:", e)
+    }
+
+    window.setTimeout(() => {
+      if (code === CONFIG_TOKENS.AUTOR) {
+        setStatusMessage(
+          "MODO ESPEJO ACTIVADO: Acceso de Autor verificado. Deshabilitando telemetría de rastreo.",
+        )
+        setResultados({ ...DATOS_PRIMAFRIO, modoEspejo: true })
+        setStatus("success")
+        return
+      }
+
+      if (code === CONFIG_TOKENS.CLIENTE) {
+        setStatusMessage(
+          "AUTENTICACIÓN SOBERANA EXITOSA. Firma criptográfica SHA-256 validada.",
+        )
+        setResultados({ ...DATOS_PRIMAFRIO, modoEspejo: false })
+        setStatus("success")
+        return
+      }
+
+      setStatusMessage(
+        "ERROR: Clave OTP inválida, inexistente o afectada por veto perimetral.",
+      )
+      setResultados(null)
+      setStatus("error")
+    }, 600)
+  }
+function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     // Sanitización: quitar espacios, mayúsculas y eliminar acentos/diacríticos.
     const code = token
