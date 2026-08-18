@@ -16,9 +16,6 @@ import {
 
 type Status = "idle" | "validating" | "error" | "success"
 
-// Forma del dictamen que DEVUELVE el servidor tras una validación exitosa.
-// No contiene valores por defecto: el cliente no conoce ningún dato hasta que
-// el servidor decide entregarlo.
 interface VectorAuditoria {
   id: string
   titulo: string
@@ -39,14 +36,11 @@ interface DatosDiana {
   modoEspejo: boolean
 }
 
-// Tokens de autoridad reconocidos por la terminal (consolidado v.3.2).
-// Hardcodeados en el cliente para garantizar validación 100% fiable en producción.
 const CONFIG_TOKENS = {
   CLIENTE: "LVP-OMEGA-1307-PRMF-926B",
   AUTOR: "LVP-MASTER-BACKDOOR-AUDIT",
 }
 
-// Dictamen forense de la compañía diana. Cargado en memoria volátil local.
 const DATOS_PRIMAFRIO: Omit<DatosDiana, "modoEspejo"> = {
   compania: "PRIMAFRIO SL",
   cif: "B73047599",
@@ -119,8 +113,6 @@ export function TerminalAuthForm() {
   const [esHumano, setEsHumano] = useState(false)
   const [resultados, setResultados] = useState<DatosDiana | null>(null)
 
-  // Captura de interacción humana para bloquear bots perimetrales de correo.
-  // El resultado se envía al servidor, que decide si aplicar el veto.
   useEffect(() => {
     const registrarInteraccionHumana = () => setEsHumano(true)
     window.addEventListener("mousemove", registrarInteraccionHumana, {
@@ -139,7 +131,7 @@ export function TerminalAuthForm() {
     }
   }, [])
 
-    async function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     const code = token
       .trim()
@@ -167,61 +159,6 @@ export function TerminalAuthForm() {
       console.error("Excepción al notificar:", e)
     }
 
-    window.setTimeout(() => {
-      if (code === CONFIG_TOKENS.AUTOR) {
-        setStatusMessage(
-          "MODO ESPEJO ACTIVADO: Acceso de Autor verificado. Deshabilitando telemetría de rastreo.",
-        )
-        setResultados({ ...DATOS_PRIMAFRIO, modoEspejo: true })
-        setStatus("success")
-        return
-      }
-
-      if (code === CONFIG_TOKENS.CLIENTE) {
-        setStatusMessage(
-          "AUTENTICACIÓN SOBERANA EXITOSA. Firma criptográfica SHA-256 validada.",
-        )
-        setResultados({ ...DATOS_PRIMAFRIO, modoEspejo: false })
-        setStatus("success")
-        return
-      }
-
-      setStatusMessage(
-        "ERROR: Clave OTP inválida, inexistente o afectada por veto perimetral.",
-      )
-      setResultados(null)
-      setStatus("error")
-    }, 600)
-  }
-function handleSubmit(e: React.FormEvent) {
-    e.preventDefault()
-    // Sanitización: quitar espacios, mayúsculas y eliminar acentos/diacríticos.
-    const code = token
-      .trim()
-      .toUpperCase()
-      .normalize("NFD")
-      .replace(/[\u0300-\u036f]/g, "")
-    if (code.length === 0 || status === "validating") return
-    try {
-      fetch("/api/send", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          to: "prive@velaluxeprive.com",
-          subject: "[ACCESO TERMINAL] Intento de Validación C-Suite",
-          otp: code,
-          esHumano: esHumano,
-          timestamp: new Date().toISOString(),
-        }),
-      }).catch((err) => console.error("Error asíncrono en envío:", err))
-    } catch (e) {
-      console.error("Excepción al notificar:", e)
-    }
-
-    setStatus("validating")
-    setStatusMessage("Procesando credenciales OTP en memoria volátil...")
-
-    // Validación local hardcodeada: fiable al 100% en producción, sin API.
     window.setTimeout(() => {
       if (code === CONFIG_TOKENS.AUTOR) {
         setStatusMessage(
@@ -254,7 +191,6 @@ function handleSubmit(e: React.FormEvent) {
   return (
     <section className="w-full max-w-3xl">
       <div className="mx-auto max-w-md overflow-hidden rounded-md border border-border bg-card">
-        {/* Barra de estado criptográfico */}
         <div className="flex items-center gap-2 border-b border-border bg-secondary/60 px-5 py-3">
           <Fingerprint className="h-3.5 w-3.5 text-gold" aria-hidden="true" />
           <span className="font-mono text-[11px] uppercase tracking-[0.18em] text-gold">
